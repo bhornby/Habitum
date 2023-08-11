@@ -24,7 +24,8 @@ class Userclass:
         # writes user data to the memory file
         # serialise to json
         # could use pandas for data handling - is a data science library
-        filename = user_name + user_surname 
+    def save(self): 
+        filename = self.user_dictionary["name"] + self.user_dictionary["surname"] 
         with open(f"{filename}information.json", "w") as file:
             json.dump(self.user_dictionary, file)
 
@@ -33,6 +34,8 @@ class Userclass:
     # end function
 
     # need a function to get data and to validate old users
+    # will take the user information from the name information.json then add it to a new class
+    
 
 # end class 
 
@@ -45,6 +48,14 @@ def collect_user_information():
     user_input = input()
     if user_input == "yes":
         has_account = True
+        print("Now we will validate your identity.")
+        name = input("Firstname: ")
+        name = name.lower()
+        surname = input("Surname: ") 
+        surname = surname.lower()
+        birthday = input("Birthday (dd/mm/yyyy): ")
+        load_account(name, surname, birthday)
+
     elif user_input == "no":
         create_account(has_account)
     else:
@@ -313,7 +324,59 @@ def change_goals(goals):
     print_goals(goals, fg_goal_list, rg_goal_list, mg_goal_list, ag_goal_list)
     return goals
 # end function
-    
+
+# need a function to get data and to validate old users
+# will take the user information from the name information.json then add it to a new class
+# as the old one from when the user last accessed the app will not exist
+
+def load_account(user_name, user_surname, user_birthday):
+    filename = user_name + user_surname + "information.json" 
+    user_information = None
+    with open(filename, "r") as openfile:
+        json_object = json.load(openfile)
+        # this is the data stored not just the dictionary
+    correct_account = False
+    for key in json_object:
+        if json_object[key] == user_birthday:
+            correct_account = True
+            user_information = json_object
+        # end if
+    # next key
+
+    if correct_account == False:
+        print("You entered the wrong infomration, please try again.")
+        collect_user_information()
+    else:
+        # fill out the user class with data from the json file
+        # add in loading user information bar with streamlit TODO5
+        habits = {}
+        goals = {}
+        age = int
+        gender = ""
+        birthday = "" 
+        name = ""
+        surname = "" 
+
+        for key in user_information:
+            if key == "habits":
+                habits = user_information[key]
+            elif key == "goals":
+                goals = user_information[key]
+            elif key == "age":
+                age = user_information[key]
+            elif key == "gender":
+                gender = user_information[key]
+            elif key == "birthday":
+                birthday = user_information[key]
+            elif key == "name":
+                name = user_information[key]
+            elif key == "surname":
+                name = user_information[key]
+            # end if
+
+        user = Userclass(name, surname, age, gender, birthday, goals, habits)
+    # end if
+# end function 
 
 def create_account(has_account):
     if has_account == False:
@@ -364,7 +427,8 @@ def create_account(has_account):
         # habit creation
 
         # class instanciation
-        User = Userclass(name, surname, age, gender, birthday, goals, habits)
+        user = Userclass(name, surname, age, gender, birthday, goals, habits)
+        user.save()
 
 # end function 
        
@@ -378,10 +442,13 @@ def create_account(has_account):
 # TODO2 write the user dictionary to the text file - DONE
 
 
-# TODO3 be able to access the data in the user information text file when logging back into an account
+# TODO3 be able to access the data in the user information text file when logging back into an account - DONE
+
 # TODO4 port over to streamlit
 # get habits working
 # get graphs and analysis tracking working using streamlit
+
+# add in loading user information bar with streamlit TODO5
 
 # main loop 
 def main_loop():
