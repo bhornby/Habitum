@@ -1,24 +1,29 @@
+# --- USER LOG IN ---
 import streamlit as st
-import datetime
 
-# called when the button is clicked to set the clicked state in the session state to true
-def click_detect():
-    st.session_state.clicked = True
+def set_stage(i):
+    st.session_state.stage = i
 
-# checks if the clicked key exists in the session state - if not if makes one and sets its value to false
-if "clicked" not in st.session_state:
-    st.session_state.clicked = False
+def log_in():
 
-# when the button it uses the on_click function and calls the click detect functio and sets the "clicked" key to true
-# the buttons only job is to let us know if it has been clicked
-st.button("yes", on_click = click_detect())
+    if "stage" not in st.session_state:
+        st.session_state.stage = 0
+    # end if
 
-# whether the code is run of not is dependant on if the session state key "clicked" is set to true 
-if st.session_state.clicked == True:
-    st.write("Please enter your user information to access your data")
-    name = st.text_input("Name")
-    surname = st.text_input("Surname")
-    birthday = st.date_input("Birthday", datetime.date(2023, 8, 11 ), max_value=datetime.date(2099,1 ,1), min_value=datetime.date(1955,1 ,1), format="DD/MM/YYYY")
-            
+    if st.session_state.stage == 0:
+       st.title("Welcome to Habitum")
+       st.button("Begin", on_click=set_stage, args=[1], key="begin")
+    # end if
+
+    if  st.session_state.stage == 1:
+        st.text_input("What is your name", on_change=set_stage, args=[2], key="name")
+    # end if
+
+    if  st.session_state.stage == 2:
+        return st.session_state.name
+    
+# end function
+username = log_in()
+
+st.write(username)
 st.write(st.session_state)
-st.write(f"Thank you {name}, we will log you in shortly")
