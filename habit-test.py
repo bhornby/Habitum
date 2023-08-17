@@ -20,12 +20,25 @@ class Userclass:
         with open(f"{filename}information.json", "w") as file:
             json.dump(self.user_dictionary, file)
     # end function
+
+    # def set_goals(self, goals):
+    #     self.user_dictionary["goals"] = goals
+    #     print(self.user_dictionary["goals"])
+    # # end function
+
+    # def get_goals(self):
+    #     return self.user_dictionary["goals"]
+    # # end function
 # end class
 
-
+def increment(count):
+    count += 1
 
 def set_stage(i):
     st.session_state.stage = i
+
+def goal_button_clicked(more):
+    more = True
 
 # --- PASSWORD CHECK AND ACCOUNT LOAD ---
 def load_account(username, password):
@@ -96,14 +109,58 @@ def title_screen():
         st.button("Restart", on_click=set_stage, args=[0], use_container_width=True)
     # end if
 
+    # -- COLLECTING INFORMATION --
     if  st.session_state.stage == 2:
         st.session_state.birthday = str(st.session_state.birthday)
         # instance of user class
-        user = Userclass(user_habits=None, user_goals=None,username=(st.session_state.username), password=(st.session_state.password), birthday=(st.session_state.birthday))
+        user = Userclass(user_habits={}, user_goals={},username=(st.session_state.username), password=(st.session_state.password), birthday=(st.session_state.birthday))
         user.save()
+        st.session_state.user = user
+        st.title("Goals")
         st.write("The next step is to set your goals")
-        
+        st.write("Goals can be set for all areas of your life and are extreemly benificial.") 
+        st.write("They can provide you with the motivation when you need it the most giving you that extra drive. Just the fact that your using this web app shows you've got what it takes to succeed!")
+        st.write("If you've got what it takes click the button below to begin")
+        st.button("Set my goals", on_click=set_stage, args=[3])
     # end if
+
+    # --- SETTING GOALS --- Need to fix - do individual session stages for goals selection - use getter and setter methods for goals
+    if  st.session_state.stage == 3:
+        st.title("Selection")
+        st.write("Please select the area you would like to set goals in first")
+        st.session_state.fg_count = 0
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.button("Fitness", on_click=set_stage, args=[4])
+        with col2:
+            st.button("Finances", on_click=set_stage, args=[5])
+        with col3:
+            st.button("Relationships", on_click=set_stage, args=[6])
+        with col4:
+            st.button("Academics", on_click=set_stage, args=[7])
+
+        st.button("Continue", on_click=set_stage, args=[8])
+
+    # -- FITNESS GOALS --
+    if st.session_state.stage == 4:
+        st.write("When setting fitness goals these can be holistic goals or very specific targets you set for you self")
+        st.write("For example, One of my goals is to run 10km")
+        st.text_input("Set your fitness goals!", key="fitness_goal")
+        fg_count = st.session_state.fg_count
+        num = str(fg_count)
+        user = st.session_state.user
+        user.user_dictionary["goals"][f"fitness goal {num}"] = [st.session_state.fitness_goal]
+        st.button("Set another goal", on_click=set_stage, args=[3])
+        st.session_state.user = user
+        st.session_state.fg_count += 1
+    # end if
+    
+    # -- UPDATE USER INFORMATION AND CONTINUE --
+    if st.session_state.stage == 8:
+        print("save the data")
+        user = st.session_state.user
+        print(user.user_dictionary["goals"])
+        
 
     # --- LOGIN TO EXISTING ACCOUNT ---
     if st.session_state.stage == "a":
@@ -121,6 +178,6 @@ def title_screen():
         load_account(st.session_state.username, st.session_state.password)
 # end function
 title_screen()
-# st.write(st.session_state)
+st.write(st.session_state)
 
-
+# TODO allow the setting of multiple goals
