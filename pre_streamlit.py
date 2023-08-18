@@ -29,18 +29,11 @@ class Userclass:
         filename = self.user_dictionary["name"] + self.user_dictionary["surname"] 
         with open(f"{filename}information.json", "w") as file:
             json.dump(self.user_dictionary, file)
-
-        # use json.dumps to read information
-        # json_obj = json.dump(user_dictionary, indent=4)       
     # end function
 
     # need a function to get data and to validate old users
     # will take the user information from the name information.json then add it to a new class
-    
-
 # end class 
-
-
 
 # checks if the user has an account and if not prompts them to create one
 def collect_user_information():
