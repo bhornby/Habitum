@@ -22,6 +22,25 @@ class Userclass:
     # end function
 # end class
 
+def finish_intro():
+    user = st.session_state.user
+    filename = user.user_dictionary["username"]
+
+    # select habits and goals
+    with open(f"{filename}information.json", 'r', encoding='utf-8') as json_file:
+        user_dict = json.load(json_file)
+    
+    # updates habits and goals
+    user_dict["habits"] = user.user_dictionary["habits"]
+    user_dict["goals"] = user.user_dictionary["goals"]
+
+    # need to replace the old with the new
+    with open(f"{filename}information.json", 'w', encoding='utf-8') as json_file:
+        json.dump(user_dict, json_file)
+
+    st.session_state.intro_finished = True
+    # hello
+    
 def display_habits():
     fitness_habits = []
     finance_habits = []
@@ -532,26 +551,20 @@ def title_screen():
     # --- ALL HABITS SET ---
     if st.session_state.stage == 15:
         display_habits()
-
+        st.button("Continue to Launchpad", on_click=finish_intro, use_container_width=True)
 
     # --- LOGIN TO EXISTING ACCOUNT ---
     if st.session_state.stage == "a":
         st.text_input("What is your username", key="username")
         st.text_input("What is your password", key="password")
-        col1, col2 = st.columns(2, gap="large")
-        # with col1:
-        st.button("Continue", on_click=set_stage, args= "b",use_container_width=True)
-        # with col2:
-        st.button("Restart", on_click=set_stage, args=[0], use_container_width=True)
-    # end if
+        st.divider()
+        st.button("Continue to Launchpad", on_click=finish_intro,use_container_width=True)
+    
+    if st.session_state.intro_finished == True:
+        return True
+        
 
-    # --- LOAD DATA ---
-    if st.session_state.stage == "b":
-        load_account(st.session_state.username, st.session_state.password)
-# end function
-# st.write(st.session_state)
 
-# TODO figure out why the habit input is so buggy.
-# TODO hen ask perform habit input - see apple notes for full to do on this topic
+    
 # TODO save the user data to the json file as well - update it
 # TODO use the metrics feature for indicating how well the day has gone
