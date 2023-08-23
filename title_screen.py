@@ -22,6 +22,40 @@ class Userclass:
     # end function
 # end class
 
+def display_habits():
+    fitness_habits = []
+    finance_habits = []
+    relationship_habits = []
+    academic_habits = []
+
+    user = st.session_state.user
+    habits = user.user_dictionary["habits"]
+    for key in habits:
+        if "fit_hab" in key:
+            fitness_habits.append(habits[key])
+        if "fin_hab" in key:
+            finance_habits.append(habits[key])
+        if "rel_hab" in key:
+            relationship_habits.append(habits[key])
+        if "acc_hab" in key:
+            academic_habits.append(habits[key])
+
+
+    st.title("Your habits")
+    st.subheader("Fitness Habits")
+    for list in fitness_habits:
+        st.write(*list)  
+    st.subheader("Finance Habits")
+    for list in finance_habits:
+        st.write(*list)  
+    st.subheader("Relationship Habits")
+    for list in relationship_habits:
+        st.write(*list)
+    st.subheader("Academic / Work Habits")
+    for list in academic_habits:
+        st.write(*list)
+# end function
+
 def display_goals():
     fg_list = []
     fng_list = []
@@ -45,6 +79,7 @@ def display_goals():
     # col1, col2, col3, col4 = st.columns(4)
     # with col1:
     st.title("Your Goals")
+    st.write("Congratulation on setting your goals! Remember, self-improvement is a gradual process, and it's important to be patient with yourself. Start with a few Goals that resonate with you and gradually incorporate more over time.")
     st.subheader("Fitness Goals")
     for list in fg_list:
         st.write(*list)
@@ -67,10 +102,8 @@ def increment(count):
     count += 1
 
 def set_stage(i):
-    st.session_state.stage = i
-
-def goal_button_clicked():
     st.session_state.clicked = True
+    st.session_state.stage = i
 
 # --- PASSWORD CHECK AND ACCOUNT LOAD ---
 def load_account(username, password):
@@ -119,10 +152,16 @@ def title_screen():
     if "stage" not in st.session_state:
         st.session_state.stage = 0
     # end if
-
+    
     if st.session_state.stage == 0:
-        st.title("Welcome to Habitum")
-        account_status = st.radio("Do you have an account?", ("Yes", "No"), key="option")
+        st.title("Welcome to Solaris - *Illumiante Your Habits*")
+
+        st.write("Congratulations on taking the first step towards a brighter you. 🌟 ")
+        st.write("Solaris is here to guide you on your journey of building positive habits and maintaining streaks that lead to lasting change.")
+        st.write("Our app is designed to empower you, helping you unlock your full potential one day at a time. Whether you're striving for better health, increased productivity, enhanced mindfulness, or any other goal that resonates with you, Solaris is your companion in this exciting endeavor. Tap 'Next' to learn how Solaris works and how you can make the most of its features. Remember, every small step adds up to a remarkable transformation. 🚀") 
+        st.write("Here's to a radiant future filled with accomplishments and growth! The Solaris Team")
+        
+        account_status = st.radio("Do you have an account?", ("Yes", "No"),key="options")
         if account_status == "Yes":
             st.button("Login", on_click=set_stage, args=["a"], key="login")
         elif account_status == "No":
@@ -150,8 +189,8 @@ def title_screen():
         st.title("Goals")
         st.write("The next step is to set your goals")
         st.write("Goals can be set for all areas of your life and are extreemly benificial.") 
-        st.write("They can provide you with the motivation when you need it the most giving you that extra drive. Just the fact that your using this web app shows you've got what it takes to succeed!")
-        st.write("If you've got what it takes click the button below to begin")
+        st.write("Setting goals is like giving yourself a roadmap to success. It's more than just saying what you want; it's about figuring out the steps to get there. When you set clear goals, you're more likely to reach them because you know exactly what you're aiming for. It's like having a target to focus on, which keeps you motivated and gives your efforts purpose. Plus, when you hit those milestones you've set, it's an amazing feeling of accomplishment.")
+        st.write("But it's not just about the end result. Goal setting also helps you stay organized and make the most of your time. Instead of feeling overwhelmed by big dreams, you break them down into manageable steps. This approach can work in all areas of life – from personal stuff to school or work. So whether you're aiming to learn a new skill, save money, improve relationships, or excel in your career, setting goals is like having your own personal cheering squad, keeping you on track and cheering you on as you make things happen.")
         st.button("Set my goals", on_click=set_stage, args=[3])
         st.session_state.fg_count = 1
         st.session_state.fng_count = 1
@@ -164,14 +203,11 @@ def title_screen():
         st.title("Selection")
         st.write("Please select the area you would like to set a goal in")
         col1, col2, col3, col4 = st.columns(4)
-        with col1:
-            st.button("Fitness", on_click=set_stage, args=[4])
-        with col2:
-            st.button("Finances", on_click=set_stage, args=[5])
-        with col3:
-            st.button("Relationships", on_click=set_stage, args=[6])
-        with col4:
-            st.button("Academics", on_click=set_stage, args=[7])
+        
+        st.checkbox("Fitness", on_change=set_stage, args=[4])
+        st.checkbox("Finances", on_change=set_stage, args=[5])
+        st.checkbox("Relationships", on_change=set_stage, args=[6])
+        st.checkbox("Academics / Work", on_change=set_stage, args=[7])
 
         st.button("Continue", on_click=set_stage, args=[8])
 
@@ -227,11 +263,12 @@ def title_screen():
             st.session_state.rg_count += 1
     # end if
 
+    # --- ACADEMIC / WORKPLACE GOALS --
     if st.session_state.stage == 7:
-        st.title("Academic")
-        st.write("When setting Academic goals these can be holistic or very specific targets you set for yourself")
+        st.title("Academic / Work")
+        st.write("When setting Academic / Work goals these can be holistic or very specific targets you set for yourself")
         st.write("For example, One of my goals is have a 4.0 Gpa")
-        ac_goal = st.text_input("Set your Academic goals!", key="academic_goals")
+        ac_goal = st.text_input("Set your goals!", key="academic_goals")
         ag_count = st.session_state.ag_count
         num = str(ag_count)
         user = st.session_state.user
@@ -246,7 +283,256 @@ def title_screen():
     # -- UPDATE USER INFORMATION AND CONTINUE --
     if st.session_state.stage == 8:
         display_goals()
+        st.subheader("The Next Step")
+        st.write("If you are happy with your goals - click the button to set your habits")
+        st.button("Habits", on_click=set_stage, args=[9])
+    
+    # --- HABIT SETTING !!---
+    if st.session_state.stage == 9:
+        st.title("Habits")
+        st.subheader("What are Habits?")
+        st.write("Habits are small bitesized activities the we aim to do everyday which help us make progress towards our goals.")
+        st.write("When you look at a big goals e.g. 'run a marathon' is can seem daunting. So what we do is we break that down into smaller sub goals and set habits which help us achieve them")
+        st.write("Hence we are always growing, always making progress!")
+        st.button("Set my habits", on_click=set_stage, args=[10], use_container_width=True)
+        st.session_state.fit_hab_count = 0
+        st.session_state.fin_hab_count = 0
+        st.session_state.rel_hab_count = 0
+        st.session_state.acc_hab_count = 0
+    
+    if st.session_state.stage == 10:
+        st.title("Habit selection")
+        st.write("self-improvement is a gradual process, and it's important to be patient with yourself. Start with a few habits that resonate with you and gradually incorporate more over time. Additionally, consistency is key – it's better to start small and maintain these habits than to take on too much and become overwhelmed.")
+        st.write("Please select the area you would like to set habits in")
+        st.checkbox("Fitness", on_change=set_stage, args=[11])    
+        st.checkbox("Finances", on_change=set_stage, args=[12])
+        st.checkbox("Relationships", on_change=set_stage, args=[13])
+        st.checkbox("Academics / Work", on_change=set_stage, args=[14])
+        st.button("Continue", on_click=set_stage, args=[15])
+
+    # --- FITNESS HABITS ---
+    if st.session_state.stage == 11:
+        user = st.session_state.user
+        st.title("Fitness")
+        st.write("Add your habits in the text box bellow, Or you can choose from the suggestions")
+        fit_hab = st.text_input("add habit",key = "fit_hab", label_visibility="collapsed")
+        if fit_hab != "":
+            user.user_dictionary["habits"][f"fit_hab{st.session_state.fit_hab_count}"] = [fit_hab]
+            st.session_state.user = user
+            st.button("Add another Habbit", on_click=set_stage, args=[10])
+            st.session_state.fit_hab_count += 1
+
+        st.divider()
+        # use the checkbox
+        reg_exercise = st.checkbox("**Regular Exercise:** Engage in physical activity for at least 30 minutes most days of the week to improve cardiovascular health, strength, and overall well-being.")
+        bal_nutrition = st.checkbox("**Balanced Nutrition:** Consume a well-rounded diet that includes a variety of fruits, vegetables, lean proteins, whole grains, and healthy fats.")
+        sleep = st.checkbox("**Adequate Sleep**: Prioritize getting 7-9 hours of quality sleep each night to support physical and mental recovery.")
+        mindful = st.checkbox("**Mindful Movement**: Incorporate mindfulness practices like yoga, tai chi, or meditation to promote relaxation and flexibility.")
+        hydration = st.checkbox("**Hydration:** Drink enough water throughout the day to stay hydrated and support bodily functions.")
+        st.divider()
+        # clicked = st.checkbox("**Continue**")
+        clicked = st.button("Doublc click to continue", use_container_width=True)
+        if clicked == True:
+            if reg_exercise == True:
+                habits = user.user_dictionary["habits"]
+                habits[f"fit_hab{st.session_state.fit_hab_count}"] = ["Regular Exercise"]
+                user.user_dictionary["habits"] = habits
+                st.session_state.fit_hab_count += 1
+                st.session_state.user = user
+            # end if
+
+            if bal_nutrition == True:
+                habits = user.user_dictionary["habits"]
+                habits[f"fit_hab{st.session_state.fit_hab_count}"] = ["Balanced Nutrition"]
+                user.user_dictionary["habits"] = habits
+                st.session_state.user = user
+                st.session_state.fit_hab_count += 1
+            # end if
+
+            if sleep == True:
+                habits = user.user_dictionary["habits"]
+                habits[f"fit_hab{st.session_state.fit_hab_count}"] = ["Adequate Sleep"]
+                user.user_dictionary["habits"] = habits
+                st.session_state.user = user
+                st.session_state.fit_hab_count += 1
+            # end if
+
+            if mindful == True:
+                habits = user.user_dictionary["habits"]
+                habits[f"fit_hab{st.session_state.fit_hab_count}"] = ["Mindful Movement"]
+                user.user_dictionary["habits"] = habits
+                st.session_state.user = user
+                st.session_state.fit_hab_count += 1
+            # end if
+
+            if hydration == True:
+                habits = user.user_dictionary["habits"]
+                habits[f"fit_hab{st.session_state.fit_hab_count}"] = ["Hydration"]
+                user.user_dictionary["habits"] = habits
+                st.session_state.user = user
+                st.session_state.fit_hab_count += 1
+            # end if
+            set_stage(10)
+    # end if
+
+    # --- Finance Habits ---
+    if st.session_state.stage == 12:
+        user = st.session_state.user
+        st.title("Finances")
+        st.write("Add your habits in the text box bellow, Or you can choose from the suggestions")
+        fit_hab = st.text_input("add habit",key = "fin_hab", label_visibility="collapsed")
+        if fit_hab != "":
+            user.user_dictionary["habits"][f"fin_hab{st.session_state.fin_hab_count}"] = [fin_hab]
+            st.session_state.user = user
+            st.button("Add another Habbit", on_click=set_stage, args=[10])
+            st.session_state.fin_hab_count += 1
+
+        st.divider()
+
+        budgeting = st.checkbox("**Budgeting**: Create a detailed budget to track income, expenses, and savings goals.")
+        saving = st.checkbox("**Savings**: Regularly set aside a portion of your income for savings and emergency funds.")
+        investing = st.checkbox("**Investing**: Educate yourself about investing to grow your wealth over time.")
+        delay_grat = st.checkbox("**Spend No Money**: Practice self-discipline by avoiding unnecessary purchases and focusing on long-term financial goals.")
+
+        st.divider()
+
+        clicked = st.button("Doublc click to continue", use_container_width=True)
+        if clicked == True:
+            if budgeting == True:
+                habits = user.user_dictionary["habits"]
+                habits[f"fin_hab{st.session_state.fin_hab_count}"] = ["Budgeting - spend some time each day to review you spending"]
+                user.user_dictionary["habits"] = habits
+                st.session_state.fin_hab_count += 1
+                st.session_state.user = user
+            # end if
+
+            if saving == True:
+                habits = user.user_dictionary["habits"]
+                habits[f"fin_hab{st.session_state.fin_hab_count}"] = ["Saving - Set aside a some money for rainy days"]
+                user.user_dictionary["habits"] = habits
+                st.session_state.user = user
+                st.session_state.fin_hab_count += 1
+            # end if
+
+            if investing == True:
+                habits = user.user_dictionary["habits"]
+                habits[f"fin_hab{st.session_state.fin_hab_count}"] = ["Investing - Educate yourself and build your wealth"]
+                user.user_dictionary["habits"] = habits
+                st.session_state.user = user
+                st.session_state.fit_hab_count += 1
+            # end if
+
+            if delay_grat == True:
+                habits = user.user_dictionary["habits"]
+                habits[f"fin_hab{st.session_state.fin_hab_count}"] = ["Spend No Money - Delay Gratification"]
+                user.user_dictionary["habits"] = habits
+                st.session_state.user = user
+                st.session_state.fin_hab_count += 1
+            # end if
+            set_stage(10)
+    # end if
+    
+    # --- RELATIONSHIP HABITS ---
+    if st.session_state.stage == 13:
+        user = st.session_state.user
+        st.title("Relationships")
+        st.write("Add your habits in the text box bellow, Or you can choose from the suggestions")
+        rel_hab = st.text_input("add habit",key = "rel_hab", label_visibility="collapsed")
+        if rel_hab != "":
+            user.user_dictionary["habits"][f"rel_hab{st.session_state.rel_hab_count}"] = [rel_hab]
+            st.session_state.user = user
+            st.button("Add another Habbit", on_click=set_stage, args=[10])
+            st.session_state.rel_hab_count += 1
+
+        st.divider()
+        gratitude = st.checkbox("**Gratitude**: Express appreciation for the people in your life through words and actions.")
+        qual_time = st.checkbox("**Quality Time**: Spend meaningful time with loved ones, nurturing connections and creating positive memories.")
+        communication = st.checkbox("**Effective Communication**: Improve your interpersonal skills by actively listening and expressing yourself clearly and empathetically.")
+        st.divider()
+
+        clicked = st.button("Doublc click to continue", use_container_width=True)
+        if clicked == True:
+            if gratitude == True:
+                habits = user.user_dictionary["habits"]
+                habits[f"rel_hab{st.session_state.rel_hab_count}"] = ["Gratitude - Express appreciation fo rthe people an things in your life"]
+                user.user_dictionary["habits"] = habits
+                st.session_state.user = user
+                st.session_state.rel_hab_count += 1
+
+            if qual_time == True:
+                habits = user.user_dictionary["habits"]
+                habits[f"rel_hab{st.session_state.rel_hab_count}"] = ["Quality Time - Spend Time with those you Love"]
+                user.user_dictionary["habits"] = habits
+                st.session_state.user = user
+                st.session_state.rel_hab_count += 1
+            
+            if communication == True:
+                habits = user.user_dictionary["habits"]
+                habits[f"rel_hab{st.session_state.rel_hab_count}"] = ["Communication - Improve your social skills by actively listening and expressing yourself clearly and empathetically."]
+                user.user_dictionary["habits"] = habits
+                st.session_state.user = user
+                st.session_state.rel_hab_count += 1
+            # end if
+            set_stage(10)
+    # end if
         
+    # --- ACADEMIC / WORK HABITS ---
+    if st.session_state.stage == 14:
+        user = st.session_state.user
+        st.title("Academic / Work")
+        st.write("Add your habits in the text box bellow, Or you can choose from the suggestions")
+        acc_hab = st.text_input("add habit",key = "acc_hab", label_visibility="collapsed")
+        if acc_hab != "":
+            user.user_dictionary["habits"][f"acc_hab{st.session_state.acc_hab_count}"] = [acc_hab]
+            st.session_state.user = user
+            st.button("Add another Habbit", on_click=set_stage, args=[10])
+            st.session_state.acc_hab_count += 1
+        
+        st.divider()
+        cont_learn = st.checkbox("**Continuous Learning**: Cultivate a habit of learning by reading books, taking courses, or attending workshops relevant to your field.")
+        time_management = st.checkbox("**Time Management**: Plan the next day, focus your intent on a set few critical tasks")
+        goal_setting = st.checkbox("**Goal Setting**: Redefine and look over your goals everyday, set meaningful and personal goals that resonate with you.")
+        networking = st.checkbox("**Networking**: Build a strong professional network by attending events and maintaining connections with peers and mentors.")
+        st.divider()
+
+        clicked = st.button("Doublc click to continue", use_container_width=True)
+        if clicked == True:
+            if cont_learn == True:
+                habits = user.user_dictionary["habits"]
+                habits[f"acc_hab{st.session_state.acc_hab_count}"] = ["Continuous Learning - Learn something new everyday, cultivate a habit of learning"]
+                user.user_dictionary["habits"] = habits
+                st.session_state.user = user
+                st.session_state.acc_hab_count += 1
+
+            if time_management == True:
+                habits = user.user_dictionary["habits"]
+                habits[f"acc_hab{st.session_state.acc_hab_count}"] = ["Time Management - Plan the next day, focus your intent on a set few critical tasks"]
+                user.user_dictionary["habits"] = habits
+                st.session_state.user = user
+                st.session_state.acc_hab_count += 1
+        
+            if goal_setting == True:
+                habits = user.user_dictionary["habits"]
+                habits[f"acc_hab{st.session_state.acc_hab_count}"] = ["Goal Setting - Redefine and look over your goals everyday"]
+                user.user_dictionary["habits"] = habits
+                st.session_state.user = user
+                st.session_state.acc_hab_count += 1
+
+            if networking == True:
+                habits = user.user_dictionary["habits"]
+                habits[f"acc_hab{st.session_state.acc_hab_count}"] = ["Networking - Build a strong professional network by attending events and maintaining connections with peers and mentors."]
+                user.user_dictionary["habits"] = habits
+                st.session_state.user = user
+                st.session_state.acc_hab_count += 1
+            # end if
+            set_stage(10)
+        # end if
+    # end if
+
+    # --- ALL HABITS SET ---
+    if st.session_state.stage == 15:
+        display_habits()
+
 
     # --- LOGIN TO EXISTING ACCOUNT ---
     if st.session_state.stage == "a":
@@ -263,10 +549,9 @@ def title_screen():
     if st.session_state.stage == "b":
         load_account(st.session_state.username, st.session_state.password)
 # end function
-title_screen()
 # st.write(st.session_state)
 
-# TODO display the users goals nicely - then ask perform habit analysis - chat gpt input??? - make sure to have space for personal input
-# learn how to display the data from the dictionary nicely
+# TODO figure out why the habit input is so buggy.
+# TODO hen ask perform habit input - see apple notes for full to do on this topic
 # TODO save the user data to the json file as well - update it
 # TODO use the metrics feature for indicating how well the day has gone
