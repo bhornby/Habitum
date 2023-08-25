@@ -2,8 +2,9 @@ from title_screen import title_screen
 from launchpad import launchpad
 
 def main():
-    username, passoword = title_screen()
-    launchpad(username, passoword)
+    data = title_screen()
+    if data != None:
+        launchpad(data[0], data[1])
 
 #  end function
 main()

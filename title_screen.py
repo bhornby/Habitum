@@ -38,11 +38,13 @@ def finish_intro():
     with open(f"{filename}information.json", 'w', encoding='utf-8') as json_file:
         json.dump(user_dict, json_file)
 
+    set_stage("c")
     st.session_state.intro_finished = True
     # hello
 
 def finish_login():
     # no need to update as the file already exitst
+    set_stage("c")
     st.session_state.intro_finished = True
     
 def display_habits():
@@ -482,7 +484,7 @@ def title_screen():
         if clicked == True:
             if gratitude == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"rel_hab{st.session_state.rel_hab_count}"] = ["Gratitude - Express appreciation fo rthe people an things in your life"]
+                habits[f"rel_hab{st.session_state.rel_hab_count}"] = ["Gratitude - Express appreciation for the people an things in your life"]
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.rel_hab_count += 1
@@ -572,7 +574,7 @@ def title_screen():
         st.button("Continue to Launchpad", on_click=finish_login,use_container_width=True)
 
     if st.session_state.intro_finished == True:
-        return st.session_state.username, st.session_state.password
+        return [st.session_state.username, st.session_state.password]
         
 
 
