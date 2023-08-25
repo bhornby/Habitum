@@ -40,6 +40,10 @@ def finish_intro():
 
     st.session_state.intro_finished = True
     # hello
+
+def finish_login():
+    # no need to update as the file already exitst
+    st.session_state.intro_finished = True
     
 def display_habits():
     fitness_habits = []
@@ -116,6 +120,8 @@ def display_goals():
         st.write(*list)
 # end function
 
+def make_intro_finished():
+    st.session_state.intro_finished = False
 
 def increment(count):
     count += 1
@@ -163,6 +169,7 @@ def load_account(username, password):
                 password = user_information[key]
             
         user = Userclass(habits, goals, username, password, birthday)
+        st.session_state.user = user
     # end if
 # end function 
 
@@ -171,14 +178,16 @@ def title_screen():
     if "stage" not in st.session_state:
         st.session_state.stage = 0
     # end if
-    
+    if "intro_finished" not in st.session_state:
+        make_intro_finished()
+
     if st.session_state.stage == 0:
-        st.title("Welcome to Solaris - *Illumiante Your Habits*")
+        st.title("Welcome to Habitum - *Illumiante Your Habits*")
 
         st.write("Congratulations on taking the first step towards a brighter you. 🌟 ")
-        st.write("Solaris is here to guide you on your journey of building positive habits and maintaining streaks that lead to lasting change.")
-        st.write("Our app is designed to empower you, helping you unlock your full potential one day at a time. Whether you're striving for better health, increased productivity, enhanced mindfulness, or any other goal that resonates with you, Solaris is your companion in this exciting endeavor. Tap 'Next' to learn how Solaris works and how you can make the most of its features. Remember, every small step adds up to a remarkable transformation. 🚀") 
-        st.write("Here's to a radiant future filled with accomplishments and growth! The Solaris Team")
+        st.write("Habitum is here to guide you on your journey of building positive habits and maintaining streaks that lead to lasting change.")
+        st.write("Our app is designed to empower you, helping you unlock your full potential one day at a time. Whether you're striving for better health, increased productivity, enhanced mindfulness, or any other goal that resonates with you, Solaris is your companion in this exciting endeavor. Tap 'Next' to learn how Habitum works and how you can make the most of its features. Remember, every small step adds up to a remarkable transformation. 🚀") 
+        st.write("Here's to a radiant future filled with accomplishments and growth! The Habitum Team")
         
         account_status = st.radio("Do you have an account?", ("Yes", "No"),key="options")
         if account_status == "Yes":
@@ -555,16 +564,15 @@ def title_screen():
 
     # --- LOGIN TO EXISTING ACCOUNT ---
     if st.session_state.stage == "a":
-        st.text_input("What is your username", key="username")
-        st.text_input("What is your password", key="password")
-        st.divider()
-        st.button("Continue to Launchpad", on_click=finish_intro,use_container_width=True)
+        st.session_state.username = st.text_input("What is your username")
+        st.session_state.password = st.text_input("What is your password")
+        st.button("Login",on_click=set_stage, args=["b"])
     
+    if st.session_state.stage == "b":
+        st.button("Continue to Launchpad", on_click=finish_login,use_container_width=True)
+
     if st.session_state.intro_finished == True:
-        return True
+        return st.session_state.username, st.session_state.password
         
 
 
-    
-# TODO save the user data to the json file as well - update it
-# TODO use the metrics feature for indicating how well the day has gone
