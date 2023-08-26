@@ -45,7 +45,7 @@ def finish_intro():
 def finish_login():
     # no need to update as the file already exitst
     set_stage("c")
-    st.session_state.intro_finished = True
+    st.session_state.login_finished = True
     
 def display_habits():
     fitness_habits = []
@@ -125,6 +125,9 @@ def display_goals():
 def make_intro_finished():
     st.session_state.intro_finished = False
 
+def make_login_finished():
+    st.session_state.login_finished = False
+
 def increment(count):
     count += 1
 
@@ -183,12 +186,15 @@ def title_screen():
     if "intro_finished" not in st.session_state:
         make_intro_finished()
 
+    if "login_finished" not in st.session_state:
+            make_login_finished()
+            
     if st.session_state.stage == 0:
-        st.title("Welcome to Habitum - *Illumiante Your Habits*")
+        st.title("Welcome to *Habitum*")
 
         st.write("Congratulations on taking the first step towards a brighter you. 🌟 ")
         st.write("Habitum is here to guide you on your journey of building positive habits and maintaining streaks that lead to lasting change.")
-        st.write("Our app is designed to empower you, helping you unlock your full potential one day at a time. Whether you're striving for better health, increased productivity, enhanced mindfulness, or any other goal that resonates with you, Solaris is your companion in this exciting endeavor. Tap 'Next' to learn how Habitum works and how you can make the most of its features. Remember, every small step adds up to a remarkable transformation. 🚀") 
+        st.write("Our app is designed to empower you, helping you unlock your full potential one day at a time. Whether you're striving for better health, increased productivity, enhanced mindfulness, or any other goal that resonates with you, habitum is your companion in this exciting endeavor. Tap 'Next' to learn how Habitum works and how you can make the most of its features. Remember, every small step adds up to a remarkable transformation. 🚀") 
         st.write("Here's to a radiant future filled with accomplishments and growth! The Habitum Team")
         
         account_status = st.radio("Do you have an account?", ("Yes", "No"),key="options")
@@ -365,7 +371,7 @@ def title_screen():
         if clicked == True:
             if reg_exercise == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"fit_hab{st.session_state.fit_hab_count}"] = ["Regular Exercise"]
+                habits[f"fit_hab{st.session_state.fit_hab_count}"] = {"desc":"Regular Exercise - engage in physical activity for at least 30 minutes", "dates_done":[]}
                 user.user_dictionary["habits"] = habits
                 st.session_state.fit_hab_count += 1
                 st.session_state.user = user
@@ -373,7 +379,7 @@ def title_screen():
 
             if bal_nutrition == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"fit_hab{st.session_state.fit_hab_count}"] = ["Balanced Nutrition"]
+                habits[f"fit_hab{st.session_state.fit_hab_count}"] = {"desc":"Balanced Nutrition - consume a well-rounded diet", "dates_done":[]}
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.fit_hab_count += 1
@@ -381,7 +387,7 @@ def title_screen():
 
             if sleep == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"fit_hab{st.session_state.fit_hab_count}"] = ["Adequate Sleep"]
+                habits[f"fit_hab{st.session_state.fit_hab_count}"] = ["Adequate Sleep - sleep 7-9 hours each night"]
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.fit_hab_count += 1
@@ -389,7 +395,7 @@ def title_screen():
 
             if mindful == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"fit_hab{st.session_state.fit_hab_count}"] = ["Mindful Movement"]
+                habits[f"fit_hab{st.session_state.fit_hab_count}"] = ["Mindful Movement - practice a mindful movement exercies like Taichi"]
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.fit_hab_count += 1
@@ -397,7 +403,7 @@ def title_screen():
 
             if hydration == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"fit_hab{st.session_state.fit_hab_count}"] = ["Hydration"]
+                habits[f"fit_hab{st.session_state.fit_hab_count}"] = ["Hydration - Drink enought water each day - aim for 2l"]
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.fit_hab_count += 1
@@ -573,8 +579,18 @@ def title_screen():
     if st.session_state.stage == "b":
         st.button("Continue to Launchpad", on_click=finish_login,use_container_width=True)
 
-    if st.session_state.intro_finished == True:
+    if st.session_state.login_finished == True:
         return [st.session_state.username, st.session_state.password]
+
+    if st.session_state.intro_finished == True:
+        user = st.session_state.user
+        st.session_state.username = user.user_dictionary["username"]
+        st.session_state.password = user.user_dictionary["password"]
+        return [st.session_state.username, st.session_state.password]
+
+    # TODO fix the create new account bug when accessing the launchpad
+    st.write(st.session_state)
+# end function
         
 
 
