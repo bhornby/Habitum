@@ -32,7 +32,6 @@ def launchpad(username, password):
 
 
 
-# TODO - load the user data 
+
 # TODO - daily tracker
-# TODO - makes ure its is a new page
 # TODO use the metrics feature for indicating how well the day has gone
