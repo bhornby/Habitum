@@ -16,11 +16,28 @@ def display_metrics(user):
 def display_habits(user):
     habits = user.user_dictionary["habits"]
     # use a checkbox column
+    fit_flag = 0
+    fin_flag = 0
+    rel_flag = 0
+    acc_flag = 0
+    for key in habits:
+        if "fit_hab" in key:
+            fit_flag += 1
+        elif "fin_hab" in key:
+            fin_flag += 1
+        elif "rel_hab" in key:
+            rel_flag += 1
+        elif "acc_hab" in key:
+            acc_flag += 1
     
-    make_checkbox_col(habits, "fit")
-    make_checkbox_col(habits, "fin")
-    make_checkbox_col(habits, "rel")
-    make_checkbox_col(habits, "acc")
+    if fit_flag > 0:
+        make_checkbox_col(habits, "fit")
+    if fin_flag > 0:
+        make_checkbox_col(habits, "fin")
+    if rel_flag > 0:
+        make_checkbox_col(habits, "rel")
+    if acc_flag > 0:
+        make_checkbox_col(habits, "acc")
 
 def make_checkbox_col(habits, type):
     habit_name = f"{type}_hab"

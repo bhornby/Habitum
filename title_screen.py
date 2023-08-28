@@ -346,8 +346,7 @@ def title_screen():
         st.write("Add your habits in the text box bellow, Or you can choose from the suggestions")
         fit_hab = st.text_input("add habit",key = "fit_hab", label_visibility="collapsed")
         if fit_hab != "":
-            fit_hab_dict = {"desc": fit_hab, "dates_done": []}
-            user.user_dictionary["habits"][f"fit_hab{st.session_state.fit_hab_count}"] = [fit_hab_dict]
+            user.user_dictionary["habits"][f"fit_hab{st.session_state.fit_hab_count}"] = {"desc": fit_hab, "dates_done": []}
             st.session_state.user = user
             st.button("Add another Habbit", on_click=set_stage, args=[10])
             st.session_state.fit_hab_count += 1
@@ -412,8 +411,7 @@ def title_screen():
         st.write("Add your habits in the text box bellow, Or you can choose from the suggestions")
         fin_hab = st.text_input("add habit",key = "fin_hab", label_visibility="collapsed")
         if fin_hab != "":
-            fin_hab_dict = {"desc": fin_hab, "dates_done": []}
-            user.user_dictionary["habits"][f"fin_hab{st.session_state.fin_hab_count}"] = [fin_hab_dict]
+            user.user_dictionary["habits"][f"fin_hab{st.session_state.fin_hab_count}"] = {"desc": fin_hab, "dates_done": []}
             st.session_state.user = user
             st.button("Add another Habbit", on_click=set_stage, args=[10])
             st.session_state.fin_hab_count += 1
@@ -470,8 +468,7 @@ def title_screen():
         st.write("Add your habits in the text box bellow, Or you can choose from the suggestions")
         rel_hab = st.text_input("add habit",key = "rel_hab", label_visibility="collapsed")
         if rel_hab != "":
-            rel_hab_dict = {"desc": rel_hab, "dates_done": []}
-            user.user_dictionary["habits"][f"rel_hab{st.session_state.rel_hab_count}"] = [rel_hab_dict]
+            user.user_dictionary["habits"][f"rel_hab{st.session_state.rel_hab_count}"] = {"desc": rel_hab, "dates_done": []}
             st.session_state.user = user
             st.button("Add another Habbit", on_click=set_stage, args=[10])
             st.session_state.rel_hab_count += 1
@@ -515,8 +512,7 @@ def title_screen():
         st.write("Add your habits in the text box bellow, Or you can choose from the suggestions")
         acc_hab = st.text_input("add habit",key = "acc_hab", label_visibility="collapsed")
         if acc_hab != "":
-            acc_hab_dict = {"desc": acc_hab, "dates_done":[]}
-            user.user_dictionary["habits"][f"acc_hab{st.session_state.acc_hab_count}"] = [acc_hab_dict]
+            user.user_dictionary["habits"][f"acc_hab{st.session_state.acc_hab_count}"] = {"desc": acc_hab, "dates_done":[]}
             st.session_state.user = user
             st.button("Add another Habbit", on_click=set_stage, args=[10])
             st.session_state.acc_hab_count += 1
