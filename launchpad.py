@@ -75,20 +75,21 @@ def display_habits():
     
     if fit_flag > 0:
         make_checkbox_col(habits, "fit",fit_hab_list)
-        update_checkbox_col("Fitness", habits, fit_hab_list)
     # end if
     if fin_flag > 0:
         make_checkbox_col(habits, "fin",fin_hab_list)
-        update_checkbox_col("Finances", habits, fin_hab_list)
     # end if
     if rel_flag > 0:
         make_checkbox_col(habits, "rel", rel_hab_list)
-        update_checkbox_col("Relationships", habits, rel_hab_list)
     # end if
     if acc_flag > 0:
         make_checkbox_col(habits, "acc", acc_hab_list)
-        update_checkbox_col("Accademic", habits, acc_hab_list)
     # end if
+
+    update_checkbox_col("Fitness", habits, fit_hab_list)
+    update_checkbox_col("Finances", habits, fin_hab_list)
+    update_checkbox_col("Relationships", habits, rel_hab_list)
+    update_checkbox_col("Accademic", habits, acc_hab_list)
 
 def update_checkbox_col(name, habits, habit_list):
     if name == "Fitness":
@@ -166,6 +167,7 @@ def make_checkbox_col(habits, type, habit_list):
         disabled=["Habits"],
         hide_index=True,
         key=habit_name,
+        use_container_width=True,
     )              
 # end function    
 
@@ -177,15 +179,16 @@ def launchpad(username, password):
         username = (st.session_state.username) 
         username = username.capitalize()
         st.title(f"{username}'s Launchpad")
+        st.divider()
 
         if "habits" not in st.session_state:
             st.session_state.habits = user.user_dictionary["habits"]
-    
-        display_metrics()
-        st.divider()
-        display_habits()
-
-        st.write(st.session_state)
+        
+        col2, col3 = st.columns(2, gap="large")
+        with col2:
+            display_habits()
+        with col3:
+            display_metrics()
 # end function
 
 
