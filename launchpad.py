@@ -22,6 +22,7 @@ def display_metrics():
         # end if
     # next key
     habits_remaining = num_habits - habits_completed
+
     col1, col2 = st.columns(2)
     with col1:
         st.metric(label="Habits Completed", value=habits_completed, delta=habits_completed,delta_color="normal")
@@ -35,6 +36,33 @@ def display_habits():
     fin_flag = 0
     rel_flag = 0
     acc_flag = 0
+
+    fit_hab_list = []
+    fin_hab_list = []
+    rel_hab_list = []
+    acc_hab_list = []
+
+    for key in habits:
+        if "fit" in key:
+            fit_hab_list.append(habits[key]["desc"])
+        # end if
+    
+    for key in habits:
+        if "fin" in key:
+            fin_hab_list.append(habits[key]["desc"])
+        # end if
+    
+    for key in habits:
+        if "rel" in key:
+            rel_hab_list.append(habits[key]["desc"])
+        # end if
+    
+    for key in habits:
+        if "acc" in key:
+            acc_hab_list.append(habits[key]["desc"])
+        # end if
+
+
     for key in habits:
         if "fit_hab" in key:
             fit_flag += 1
@@ -46,26 +74,77 @@ def display_habits():
             acc_flag += 1
     
     if fit_flag > 0:
-        make_checkbox_col(habits, "fit")
-    # if fin_flag > 0:
-    #     make_checkbox_col(habits, "fin")
+        make_checkbox_col(habits, "fit",fit_hab_list)
+        if "Fitness" in st.session_state:
+            fit_dict = st.session_state.Fitness
+            fit_true_pos = []
+            fit_box_num = 0
+            for checkbox in fit_dict["edited_rows"]:
+                for favourite in fit_dict["edited_rows"][checkbox]:
+                    chosen = fit_dict["edited_rows"][checkbox][favourite]
+                    # if the box is checked - add its position to the fit true pos
+                    if chosen == True:
+                        fit_true_pos.append(fit_box_num)
+                    # end if
+                    fit_box_num += 1
+                # next favourite
+            # next checkbox
+
+            # now to find which habit it corresponds to and set the date done
+            for pos in fit_true_pos:
+                hab = fit_hab_list[pos]
+                now = datetime.now()
+                today = now.strftime("%m/%d/%Y")
+                for key in habits:
+                    if habits[key]["desc"] == hab:
+                        habits[key]["dates_done"] = today
+                    # end if
+                # next key
+            # next pos
+            st.session_state.habits = habits
+    # end if
+    if fin_flag > 0:
+        make_checkbox_col(habits, "fin",fin_hab_list)
+        if "Finances" in st.session_state:
+            fin_dict = st.session_state.Finances
+            fin_true_pos = []
+            fin_box_num = 0
+            for checkbox in fin_dict["edited_rows"]:
+                for favourite in fin_dict["edited_rows"][checkbox]:
+                    chosen = fin_dict["edited_rows"][checkbox][favourite]
+                    # if the box is checked - add its position to the fit true pos
+                    if chosen == True:
+                        fin_true_pos.append(fin_box_num)
+                    # end if
+                    fin_box_num += 1
+                # next favourite
+            # next checkbox
+
+            # now to find which habit it corresponds to and set the date done - need to add the constant
+            for pos in fin_true_pos:
+                hab = fin_hab_list[pos]
+                now = datetime.now()
+                today = now.strftime("%m/%d/%Y")
+                for key in habits:
+                    if habits[key]["desc"] == hab:
+                        habits[key]["dates_done"] = today
+                    # end if
+                # next key
+            # next pos
+            st.session_state.habits = habits
+    # end if
     # if rel_flag > 0:
     #     make_checkbox_col(habits, "rel")
     # if acc_flag > 0:
     #     make_checkbox_col(habits, "acc")
 
-def make_checkbox_col(habits, type):
+def make_checkbox_col(habits, type, habit_list):
     count = 0
     habit_name = f"{type}_hab"
-    widget_list = []
     fav_list = []
-    for key in habits:
-        if habit_name in key:
-            widget_list.append(habits[key]["desc"])
-        # end if
 
     if count == 0:
-        for hab in widget_list:
+        for hab in habit_list:
             fav_list.append(False)
         count += 1
     
@@ -80,7 +159,7 @@ def make_checkbox_col(habits, type):
         
     data_df = pd.DataFrame(
         {
-            habit_name:widget_list,
+            habit_name:habit_list,
             "favourite":fav_list,
         }
     )   
@@ -98,38 +177,7 @@ def make_checkbox_col(habits, type):
         disabled=["Habits"],
         hide_index=True,
         key=habit_name,
-    )  
-    
-    if "Fitness" in st.session_state:
-        fit_dict = st.session_state.Fitness
-        fit_true_pos = []
-        box_num = 0
-        for checkbox in fit_dict["edited_rows"]:
-            for favourite in fit_dict["edited_rows"][checkbox]:
-                chosen = fit_dict["edited_rows"][checkbox][favourite]
-                st.write(box_num)
-                # if the box is checked - add its position to the fit true pos
-                if chosen == True:
-                    fit_true_pos.append(box_num)
-                # end if
-                box_num += 1
-            # next favourite
-        # next checkbox
-
-        # now to find which habit it corresponds to and set the date done
-        for pos in fit_true_pos:
-            hab = widget_list[pos]
-            now = datetime.now()
-            today = now.strftime("%m/%d/%Y")
-            for key in habits:
-                if habits[key]["desc"] == hab:
-                    habits[key]["dates_done"] = today
-                # end if
-            # next key
-        # next pos
-        st.session_state.habits = habits
-    # end if
-                
+    )              
 # end function    
 
 def launchpad(username, password):
