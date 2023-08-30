@@ -102,31 +102,42 @@ def update_checkbox_col(name, habits, habit_list):
         dict = st.session_state.Accademic
 
     true_pos = []
+    edited_pos = []
     box_num = 0
+
+    # loop that returns the true position of each checkbox
+    for key in habit_list:
+        true_pos.append(box_num)
+        box_num += 1
+    # next key
+    
+
     for checkbox in dict["edited_rows"]:
+        ed_num = checkbox
         for favourite in dict["edited_rows"][checkbox]:
             chosen = dict["edited_rows"][checkbox][favourite]
-            # if the box is checked - add its position to the fit true pos
             if chosen == True:
-                true_pos.append(box_num)
+                edited_pos.append(ed_num)
             # end if
-            box_num += 1
+            
         # next favourite
     # next checkbox
 
-    # now to find which habit it corresponds to and set the date done - need to add the constant
-    for pos in true_pos:
-        hab = habit_list[pos]
-        now = datetime.now()
-        today = now.strftime("%m/%d/%Y")
-        for key in habits:
-            if habits[key]["desc"] == hab:
-                habits[key]["dates_done"] = today
-            # end if
-        # next key
-    # next pos
+    # needs to compare the true pos and the edited pos to figuer out which habit it is
+    for pos1 in true_pos:
+        for pos2 in edited_pos:
+            if habit_list[pos1] == habit_list[pos2]:
+                hab = habit_list[pos1]
+                now = datetime.now()
+                today = now.strftime("%m/%d/%Y")
+                for key in habits:
+                    if habits[key]["desc"] == hab:
+                        habits[key]["dates_done"] = today
+                    # end if
+                # next key
+        # next pos
     st.session_state.habits = habits
-# end if
+# end function
 
 def make_checkbox_col(habits, type, habit_list):
     count = 0
@@ -174,6 +185,7 @@ def make_checkbox_col(habits, type, habit_list):
 def launchpad(username, password):
     # --- HOME PAGE ---
     if st.session_state.stage == "c":
+        st.set_page_config(layout="wide")
         load_account(st.session_state.username, st.session_state.password)
         user = st.session_state.user
         username = (st.session_state.username) 
@@ -189,6 +201,8 @@ def launchpad(username, password):
             display_habits()
         with col3:
             display_metrics()
+
+        st.write(st.session_state)
 # end function
 
 

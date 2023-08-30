@@ -8,5 +8,4 @@ def main():
         launchpad(data[0], data[1])
 
 #  end function
-st.set_page_config(layout="wide")
 main()
