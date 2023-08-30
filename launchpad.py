@@ -5,8 +5,25 @@ import json
 from title_screen import Userclass
 from title_screen import load_account
 
+
 def set_stage(i):
     st.session_state.stage = i
+
+def update_save():
+    user = st.session_state.user
+    filename = user.user_dictionary["username"]
+
+    # select habits and goals
+    with open(f"{filename}information.json", 'r', encoding='utf-8') as json_file:
+        user_dict = json.load(json_file)
+    
+    # updates habits and goals
+    user_dict["habits"] = user.user_dictionary["habits"]
+    user_dict["goals"] = user.user_dictionary["goals"]
+
+    # need to replace the old with the new
+    with open(f"{filename}information.json", 'w', encoding='utf-8') as json_file:
+        json.dump(user_dict, json_file)
 
 def display_metrics():
     habits = st.session_state.habits
@@ -29,7 +46,7 @@ def display_metrics():
     with col2:
         st.metric(label="Habits Remaining", value=habits_remaining, delta=-habits_completed, delta_color="inverse")
 
-def display_habits():
+def display_habits(user):
     habits = st.session_state.habits
     # use a checkbox column
     fit_flag = 0
@@ -74,24 +91,24 @@ def display_habits():
             acc_flag += 1
     
     if fit_flag > 0:
-        make_checkbox_col(habits, "fit",fit_hab_list)
+        make_checkbox_col("fit",fit_hab_list,)
     # end if
     if fin_flag > 0:
-        make_checkbox_col(habits, "fin",fin_hab_list)
+        make_checkbox_col("fin",fin_hab_list,)
     # end if
     if rel_flag > 0:
-        make_checkbox_col(habits, "rel", rel_hab_list)
+        make_checkbox_col("rel", rel_hab_list,)
     # end if
     if acc_flag > 0:
-        make_checkbox_col(habits, "acc", acc_hab_list)
+        make_checkbox_col("acc", acc_hab_list,)
     # end if
 
-    update_checkbox_col("Fitness", habits, fit_hab_list)
-    update_checkbox_col("Finances", habits, fin_hab_list)
-    update_checkbox_col("Relationships", habits, rel_hab_list)
-    update_checkbox_col("Accademic", habits, acc_hab_list)
+    update_checkbox_col("Fitness", habits, fit_hab_list,user)
+    update_checkbox_col("Finances", habits, fin_hab_list,user)
+    update_checkbox_col("Relationships", habits, rel_hab_list,user)
+    update_checkbox_col("Accademic", habits, acc_hab_list,user)
 
-def update_checkbox_col(name, habits, habit_list):
+def update_checkbox_col(name, habits, habit_list, user):
     if name == "Fitness":
         dict = st.session_state.Fitness
     elif name == "Finances":
@@ -137,9 +154,13 @@ def update_checkbox_col(name, habits, habit_list):
                 # next key
         # next pos
     st.session_state.habits = habits
+     # update the save file
+    user.user_dictionary["habits"] = st.session_state.habits
+    st.session_state.user = user
+    update_save() 
 # end function
 
-def make_checkbox_col(habits, type, habit_list):
+def make_checkbox_col(type, habit_list):
     count = 0
     habit_name = f"{type}_hab"
     fav_list = []
@@ -179,7 +200,7 @@ def make_checkbox_col(habits, type, habit_list):
         hide_index=True,
         key=habit_name,
         use_container_width=True,
-    )              
+    )             
 # end function    
 
 def launchpad(username, password):
@@ -198,18 +219,10 @@ def launchpad(username, password):
         
         col2, col3 = st.columns(2, gap="large")
         with col2:
-            display_habits()
+            display_habits(user)
         with col3:
             display_metrics()
 
-        st.write(st.session_state)
+        # st.write(st.session_state)
 # end function
 
-
-
-
-
-# TODO - daily tracker - first display the habits
-# then allow the user to tick a checkbox if they have completed it, if completed that habit is removed from the stack,
-# and they all shuffle up
-# TODO use the metrics feature for indicating how well the day has gone
