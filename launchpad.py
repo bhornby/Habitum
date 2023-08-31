@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 from datetime import datetime
 import json
 from title_screen import Userclass
@@ -40,11 +41,24 @@ def display_metrics():
     # next key
     habits_remaining = num_habits - habits_completed
 
+    # area chart showing the running progress
+    month_data = pd.DataFrame(
+        np.random.randn(20, 1),
+        columns = ["Habits"],
+    )
+
+    
+
     col1, col2 = st.columns(2)
     with col1:
         st.metric(label="Habits Completed", value=habits_completed, delta=habits_completed,delta_color="normal")
     with col2:
         st.metric(label="Habits Remaining", value=habits_remaining, delta=-habits_completed, delta_color="inverse")
+    
+    st.markdown("#")
+    st.area_chart(
+        month_data,
+    )
 
 def display_habits(user):
     habits = st.session_state.habits
