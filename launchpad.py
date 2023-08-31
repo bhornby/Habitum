@@ -91,22 +91,26 @@ def display_habits(user):
             acc_flag += 1
     
     if fit_flag > 0:
-        make_checkbox_col("fit",fit_hab_list,)
+        make_checkbox_col("fit",fit_hab_list, habits)
+        update_checkbox_col("Fitness", habits, fit_hab_list,user)
     # end if
     if fin_flag > 0:
-        make_checkbox_col("fin",fin_hab_list,)
+        make_checkbox_col("fin",fin_hab_list,habits)
+        update_checkbox_col("Finances", habits, fin_hab_list,user)
     # end if
     if rel_flag > 0:
-        make_checkbox_col("rel", rel_hab_list,)
+        make_checkbox_col("rel", rel_hab_list,habits)
+        update_checkbox_col("Relationships", habits, rel_hab_list,user)
     # end if
     if acc_flag > 0:
-        make_checkbox_col("acc", acc_hab_list,)
+        make_checkbox_col("acc", acc_hab_list,habits)
+        update_checkbox_col("Accademic", habits, acc_hab_list,user)
     # end if
 
-    update_checkbox_col("Fitness", habits, fit_hab_list,user)
-    update_checkbox_col("Finances", habits, fin_hab_list,user)
-    update_checkbox_col("Relationships", habits, rel_hab_list,user)
-    update_checkbox_col("Accademic", habits, acc_hab_list,user)
+    
+    
+    
+    
 
 def update_checkbox_col(name, habits, habit_list, user):
     if name == "Fitness":
@@ -158,17 +162,16 @@ def update_checkbox_col(name, habits, habit_list, user):
     user.user_dictionary["habits"] = st.session_state.habits
     st.session_state.user = user
     update_save() 
-# end function
+# end function - 
 
-def make_checkbox_col(type, habit_list):
+def make_checkbox_col(type, habit_list, habits):
     count = 0
     habit_name = f"{type}_hab"
     fav_list = []
+    now = datetime.now()
+    today = now.strftime("%m/%d/%Y")
 
-    if count == 0:
-        for hab in habit_list:
-            fav_list.append(False)
-        count += 1
+    # search throught the user - habits - if today has been done mark it as true
     
     if habit_name == "fit_hab":
         habit_name = "Fitness"
@@ -178,6 +181,15 @@ def make_checkbox_col(type, habit_list):
         habit_name = "Relationships"
     elif habit_name == "acc_hab":
         habit_name = "Accademic"
+
+    if count == 0:
+        for habit in habits:
+            if type in habit:
+                if habits[habit]["dates_done"] == today:
+                    fav_list.append(True)
+                else:
+                    fav_list.append(False)
+        count += 1
         
     data_df = pd.DataFrame(
         {
