@@ -92,25 +92,21 @@ def display_habits(user):
     
     if fit_flag > 0:
         make_checkbox_col("fit",fit_hab_list, habits)
-        update_checkbox_col("Fitness", habits, fit_hab_list,user)
     # end if
     if fin_flag > 0:
         make_checkbox_col("fin",fin_hab_list,habits)
-        update_checkbox_col("Finances", habits, fin_hab_list,user)
     # end if
     if rel_flag > 0:
         make_checkbox_col("rel", rel_hab_list,habits)
-        update_checkbox_col("Relationships", habits, rel_hab_list,user)
     # end if
     if acc_flag > 0:
         make_checkbox_col("acc", acc_hab_list,habits)
-        update_checkbox_col("Accademic", habits, acc_hab_list,user)
     # end if
 
-    
-    
-    
-    
+    update_checkbox_col("Fitness", habits, fit_hab_list,user)
+    update_checkbox_col("Finances", habits, fin_hab_list,user)
+    update_checkbox_col("Relationships", habits, rel_hab_list,user)
+    update_checkbox_col("Accademic", habits, acc_hab_list,user)
 
 def update_checkbox_col(name, habits, habit_list, user):
     if name == "Fitness":

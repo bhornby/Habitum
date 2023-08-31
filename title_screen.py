@@ -215,104 +215,106 @@ def title_screen():
         user = Userclass(user_habits={}, user_goals={},username=(st.session_state.username), password=(st.session_state.password), birthday=(st.session_state.birthday))
         user.save()
         st.session_state.user = user
-
-        st.button("Habits", on_click=set_stage, args=[9])
-
-        # st.button("Set my goals", on_click=set_stage, args=[3])
-        # st.session_state.fg_count = 1
-        # st.session_state.fng_count = 1
-        # st.session_state.rg_count = 1
-        # st.session_state.ag_count = 1
+        st.title("Goals")
+        st.write("The next step is to set your goals")
+        st.write("Goals can be set for all areas of your life and are extreemly benificial.") 
+        st.write("Setting goals is like giving yourself a roadmap to success. It's more than just saying what you want; it's about figuring out the steps to get there. When you set clear goals, you're more likely to reach them because you know exactly what you're aiming for. It's like having a target to focus on, which keeps you motivated and gives your efforts purpose. Plus, when you hit those milestones you've set, it's an amazing feeling of accomplishment.")
+        st.write("But it's not just about the end result. Goal setting also helps you stay organized and make the most of your time. Instead of feeling overwhelmed by big dreams, you break them down into manageable steps. This approach can work in all areas of life – from personal stuff to school or work. So whether you're aiming to learn a new skill, save money, improve relationships, or excel in your career, setting goals is like having your own personal cheering squad, keeping you on track and cheering you on as you make things happen.")
+        st.button("Set my goals", on_click=set_stage, args=[3])
+        st.session_state.fg_count = 1
+        st.session_state.fng_count = 1
+        st.session_state.rg_count = 1
+        st.session_state.ag_count = 1
     # end if
 
     # --- SETTING GOALS --- Need to fix - do individual session stages for goals selection - use getter and setter methods for goals
-    # if  st.session_state.stage == 3:
-    #     st.title("Selection")
-    #     st.write("Please select the area you would like to set a goal in")
-    #     col1, col2, col3, col4 = st.columns(4)
+    if  st.session_state.stage == 3:
+        st.title("Selection")
+        st.write("Please select the area you would like to set a goal in")
+        col1, col2, col3, col4 = st.columns(4)
         
-    #     st.checkbox("Fitness", on_change=set_stage, args=[4])
-    #     st.checkbox("Finances", on_change=set_stage, args=[5])
-    #     st.checkbox("Relationships", on_change=set_stage, args=[6])
-    #     st.checkbox("Academics / Work", on_change=set_stage, args=[7])
+        st.checkbox("Fitness", on_change=set_stage, args=[4])
+        st.checkbox("Finances", on_change=set_stage, args=[5])
+        st.checkbox("Relationships", on_change=set_stage, args=[6])
+        st.checkbox("Academics / Work", on_change=set_stage, args=[7])
 
-    #     st.button("Continue", on_click=set_stage, args=[8])
+        st.button("Continue", on_click=set_stage, args=[8])
 
-    # # -- FITNESS GOALS --
-    # if st.session_state.stage == 4:
-    #     st.title("Fitness")
-    #     st.write("When setting fitness goals these can be holistic goals or very specific targets you set for yourself")
-    #     st.write("For example, One of my goals is to run 10km")
-    #     fit_goal = st.text_input("Set your fitness goals!", key="fitness_goal")
-    #     fg_count = st.session_state.fg_count
-    #     num = str(fg_count)
-    #     user = st.session_state.user
-    #     # being called before there is a goal to put it
-    #     if fit_goal != "":
-    #         user.user_dictionary["goals"][f"fitness goal {num}"] = [fit_goal]
-    #         st.session_state.user = user
-    #         st.button("Set another goal", on_click=set_stage, args=[3])
-    #         st.session_state.fg_count += 1
-    # # end if
+    # -- FITNESS GOALS --
+    if st.session_state.stage == 4:
+        st.title("Fitness")
+        st.write("When setting fitness goals these can be holistic goals or very specific targets you set for yourself")
+        st.write("For example, One of my goals is to run 10km")
+        fit_goal = st.text_input("Set your fitness goals!", key="fitness_goal")
+        fg_count = st.session_state.fg_count
+        num = str(fg_count)
+        user = st.session_state.user
+        # being called before there is a goal to put it
+        if fit_goal != "":
+            user.user_dictionary["goals"][f"fitness goal {num}"] = [fit_goal]
+            st.session_state.user = user
+            st.button("Set another goal", on_click=set_stage, args=[3])
+            st.session_state.fg_count += 1
+    # end if
 
-    # # -- FINANCIAL GOALS ---
-    # if st.session_state.stage == 5:
-    #     st.title("Financial")
-    #     st.write("When setting Financial goals holistic very specific targets you set for yourself or businesses")
-    #     st.write("For example, One of my goals is save £10 every week")
-    #     financial_goal = st.text_input("Set your Financial goals!", key="financial_goals")
-    #     fng_count = st.session_state.fng_count
-    #     num = str(fng_count)
-    #     user = st.session_state.user
-    #     # being called before there is a goal to put it
-    #     if financial_goal != "":
-    #         user.user_dictionary["goals"][f"financial goal {num}"] = [financial_goal]
-    #         st.session_state.user = user
-    #         st.button("Set another goal", on_click=set_stage, args=[3])
-    #         st.session_state.fng_count += 1
-    # # end if
+    # -- FINANCIAL GOALS ---
+    if st.session_state.stage == 5:
+        st.title("Financial")
+        st.write("When setting Financial goals holistic very specific targets you set for yourself or businesses")
+        st.write("For example, One of my goals is save £10 every week")
+        financial_goal = st.text_input("Set your Financial goals!", key="financial_goals")
+        fng_count = st.session_state.fng_count
+        num = str(fng_count)
+        user = st.session_state.user
+        # being called before there is a goal to put it
+        if financial_goal != "":
+            user.user_dictionary["goals"][f"financial goal {num}"] = [financial_goal]
+            st.session_state.user = user
+            st.button("Set another goal", on_click=set_stage, args=[3])
+            st.session_state.fng_count += 1
+    # end if
 
-    # # -- Relationship Goals --
-    # if st.session_state.stage == 6:
-    #     st.title("Relationship")
-    #     st.write("When setting Relationship goals these could be as simple as going on more dates, or seeing your friends.")
-    #     st.write("Life is made of relationships so take care of the one's you value the most")
-    #     st.write("For example, One of my goals is to see my friends once a week!")
-    #     rel_goal = st.text_input("Set your relationship goals!", key="relationship_goals")
-    #     rg_count = st.session_state.rg_count
-    #     num = str(rg_count)
-    #     user = st.session_state.user
-    #     # being called before there is a goal to put it
-    #     if rel_goal != "":
-    #         user.user_dictionary["goals"][f"relationship goal {num}"] = [rel_goal]
-    #         st.session_state.user = user
-    #         st.button("Set another goal", on_click=set_stage, args=[3])
-    #         st.session_state.rg_count += 1
-    # # end if
+    # -- Relationship Goals --
+    if st.session_state.stage == 6:
+        st.title("Relationship")
+        st.write("When setting Relationship goals these could be as simple as going on more dates, or seeing your friends.")
+        st.write("Life is made of relationships so take care of the one's you value the most")
+        st.write("For example, One of my goals is to see my friends once a week!")
+        rel_goal = st.text_input("Set your relationship goals!", key="relationship_goals")
+        rg_count = st.session_state.rg_count
+        num = str(rg_count)
+        user = st.session_state.user
+        # being called before there is a goal to put it
+        if rel_goal != "":
+            user.user_dictionary["goals"][f"relationship goal {num}"] = [rel_goal]
+            st.session_state.user = user
+            st.button("Set another goal", on_click=set_stage, args=[3])
+            st.session_state.rg_count += 1
+    # end if
 
-    # # --- ACADEMIC / WORKPLACE GOALS --
-    # if st.session_state.stage == 7:
-    #     st.title("Academic / Work")
-    #     st.write("When setting Academic / Work goals these can be holistic or very specific targets you set for yourself")
-    #     st.write("For example, One of my goals is have a 4.0 Gpa")
-    #     ac_goal = st.text_input("Set your goals!", key="academic_goals")
-    #     ag_count = st.session_state.ag_count
-    #     num = str(ag_count)
-    #     user = st.session_state.user
-    #     # being called before there is a goal to put it
-    #     if ac_goal != "":
-    #         user.user_dictionary["goals"][f"academic goal {num}"] = [ac_goal]
-    #         st.session_state.user = user
-    #         st.button("Set another goal", on_click=set_stage, args=[3])
-    #         st.session_state.ag_count += 1
-    # # end if
+    # --- ACADEMIC / WORKPLACE GOALS --
+    if st.session_state.stage == 7:
+        st.title("Academic / Work")
+        st.write("When setting Academic / Work goals these can be holistic or very specific targets you set for yourself")
+        st.write("For example, One of my goals is have a 4.0 Gpa")
+        ac_goal = st.text_input("Set your goals!", key="academic_goals")
+        ag_count = st.session_state.ag_count
+        num = str(ag_count)
+        user = st.session_state.user
+        # being called before there is a goal to put it
+        if ac_goal != "":
+            user.user_dictionary["goals"][f"academic goal {num}"] = [ac_goal]
+            st.session_state.user = user
+            st.button("Set another goal", on_click=set_stage, args=[3])
+            st.session_state.ag_count += 1
+    # end if
     
-    # # -- UPDATE USER INFORMATION AND CONTINUE --
-    # if st.session_state.stage == 8:
-    #     display_goals()
-    #     st.subheader("The Next Step")
-    #     st.write("If you are happy with your goals - click the button to set your habits")
-    #     st.button("Habits", on_click=set_stage, args=[9])
+    # -- UPDATE USER INFORMATION AND CONTINUE --
+    if st.session_state.stage == 8:
+        display_goals()
+        st.subheader("The Next Step")
+        st.write("If you are happy with your goals - click the button to set your habits")
+        st.button("Habits", on_click=set_stage, args=[9])
     
     # --- HABIT SETTING !!---
     if st.session_state.stage == 9:
