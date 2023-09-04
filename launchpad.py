@@ -58,12 +58,13 @@ def display_metrics():
     for key in habits:
         for date in habits[key]["dates_done"]:
             if date not in date_list and date != []:
-                date_list.append(habits[key]["dates_done"])
+                date_list.append(date)
 
+    # should return a list which holds the number of habits done for each day
     habit_count = 0
     for date in date_list:
         for key in habits:
-            if date == habits[key]["dates_done"]:
+            if date in habits[key]["dates_done"]:
                 habit_count += 1
             # end if
         # next key
@@ -78,7 +79,7 @@ def display_metrics():
     
     st.write("habit completed list")
     st.write(habits_completed_list)
-    st.write("habit date list")
+    st.write("date list")
     st.write(date_list)
 
     data = {
