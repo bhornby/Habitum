@@ -77,10 +77,10 @@ def display_metrics():
         index_list.append(count)
         count += 1
     
-    st.write("habit completed list")
-    st.write(habits_completed_list)
-    st.write("date list")
-    st.write(date_list)
+    # st.write("habit completed list")
+    # st.write(habits_completed_list)
+    # st.write("date list")
+    # st.write(date_list)
 
     data = {
         "Habits Completed": habits_completed_list,
@@ -88,7 +88,7 @@ def display_metrics():
     }
     
     df = pd.DataFrame(data, index = index_list)
-    st.write(df)
+    # st.write(df)
     
     st.markdown("#")
     st.area_chart(
@@ -253,7 +253,7 @@ def make_checkbox_col(type, habit_list, habits):
                         fav_list.append(False)
         count += 1
 
-    st.write(len(habit_list), len(fav_list))
+    # st.write(len(habit_list), len(fav_list))
 
     data_df = pd.DataFrame(
         {
@@ -268,7 +268,7 @@ def make_checkbox_col(type, habit_list, habits):
             "favourite": st.column_config.CheckboxColumn(
                 "Completed",
                 help="Check your habit when **completed**",
-                width="large",
+                width=None,
                 required=True,
             )
         },
