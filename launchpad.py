@@ -41,24 +41,61 @@ def display_metrics():
     # next key
     habits_remaining = num_habits - habits_completed
 
-    # area chart showing the running progress
-    month_data = pd.DataFrame(
-        np.random.randn(20, 1),
-        columns = ["Habits"],
-    )
-
-    
-
     col1, col2 = st.columns(2)
     with col1:
         st.metric(label="Habits Completed", value=habits_completed, delta=habits_completed,delta_color="normal")
     with col2:
         st.metric(label="Habits Remaining", value=habits_remaining, delta=-habits_completed, delta_color="inverse")
+
+    # area chart showing the running progress
+    
+    # also need to calculate the past number of habits done on that day
+            
+    date_list = []
+    habits_completed_list = []
+    index_list = []
+    
+    for key in habits:
+        for date in habits[key]["dates_done"]:
+            if date not in date_list and date != []:
+                date_list.append(habits[key]["dates_done"])
+
+    habit_count = 0
+    for date in date_list:
+        for key in habits:
+            if date == habits[key]["dates_done"]:
+                habit_count += 1
+            # end if
+        # next key
+        habits_completed_list.append(habit_count)
+        habit_count = 0
+    # next date
+    
+    count = 0
+    for day in date_list:
+        index_list.append(count)
+        count += 1
+    
+    st.write("habit completed list")
+    st.write(habits_completed_list)
+    st.write("habit date list")
+    st.write(date_list)
+
+    data = {
+        "Habits Completed": habits_completed_list,
+        "Dates":date_list
+    }
+    
+    df = pd.DataFrame(data, index = index_list)
+    st.write(df)
     
     st.markdown("#")
     st.area_chart(
-        month_data,
+        data = df,
+        x = "Dates",
+        y = "Habits Completed",
     )
+    
 
 def display_habits(user):
     habits = st.session_state.habits
@@ -163,7 +200,7 @@ def update_checkbox_col(name, habits, habit_list, user):
                 today = now.strftime("%m/%d/%Y")
                 for key in habits:
                     if habits[key]["desc"] == hab:
-                        habits[key]["dates_done"] = today
+                        habits[key]["dates_done"].append(today)
                     # end if
                 # next key
         # next pos
@@ -192,15 +229,31 @@ def make_checkbox_col(type, habit_list, habits):
     elif habit_name == "acc_hab":
         habit_name = "Accademic"
 
+    # this code actually work there is an issue in how the dates done is added to the json file becuase there is something up with it
     if count == 0:
-        for habit in habits:
-            if type in habit:
-                if habits[habit]["dates_done"] == today:
-                    fav_list.append(True)
-                else:
-                    fav_list.append(False)
+        for hab in habit_list:
+            for key in habits:
+                if type in key and habits[key]["desc"] == hab:
+                    temp_date_list = habits[key]["dates_done"]
+                    date_bool = None
+                    for date in temp_date_list:
+                        if date == today:
+                            date_bool = True
+                        else:
+                            date_bool = False
+                    # next date
+                    # just incase the habit has never been done 
+                    if temp_date_list == []:
+                        date_bool = False
+                    
+                    if date_bool == True:
+                        fav_list.append(True)
+                    elif date_bool == False:
+                        fav_list.append(False)
         count += 1
-        
+
+    st.write(len(habit_list), len(fav_list))
+
     data_df = pd.DataFrame(
         {
             habit_name:habit_list,
