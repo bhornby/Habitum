@@ -582,7 +582,7 @@ def title_screen():
         return [st.session_state.username, st.session_state.password]
 
     # TODO fix the create new account bug when accessing the launchpad
-    st.write(st.session_state)
+    # st.write(st.session_state)
 # end function
         
 
