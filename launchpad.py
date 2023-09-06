@@ -14,13 +14,12 @@ def update_save():
     user = st.session_state.user
     filename = user.user_dictionary["username"]
 
-    # select habits and goals
+    # select habits
     with open(f"{filename}information.json", 'r', encoding='utf-8') as json_file:
         user_dict = json.load(json_file)
     
-    # updates habits and goals
+    # updates habits
     user_dict["habits"] = user.user_dictionary["habits"]
-    user_dict["goals"] = user.user_dictionary["goals"]
 
     # need to replace the old with the new
     with open(f"{filename}information.json", 'w', encoding='utf-8') as json_file:
