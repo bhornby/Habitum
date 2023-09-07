@@ -342,8 +342,27 @@ def make_sidebar():
         st.button("Add new Habit", on_click=set_stage, args=["i"], use_container_width=True)          
 # end function
     
+def add_habit(type):
+    habits = st.session_state.habits
+    count = 0
+    # find the number of habits for x type
+    for key in habits:
+        if type in key:
+            count += 1
+        # end if
+    # next key
+    key_name = f"{type}_hab{count}"
+    st.write("Type your habit in the text box bellow and click SUBMIT to add it")
+    habit = st.text_input("add habit",key = key_name, label_visibility="collapsed")
+    if habit != "":
+        habits[key_name] = {"desc": habit, "dates_done": []}
+        st.button("Add another Habbit", on_click=set_stage, args=["d"])
+    # end if
+    st.session_state.habits = habits
+    update_save()
+# end function
 
-
+# --- LAUNCHPAD ---
 def launchpad(username, password):
     # --- HOME PAGE ---
     if st.session_state.stage == "c":
@@ -366,13 +385,12 @@ def launchpad(username, password):
         make_sidebar()
     # end if
     
-    
     # --- DELETE HABITS ---
     if st.session_state.stage == "d":
         st.set_page_config(layout="centered")
         st.title("Edit Habits")
         st.divider()
-        st.write("Please select which area you want to Delete")
+        st.write("Please select type of habit you want to Delete")
         col1, col2, col3, col4 = st.columns(4)
         with col1:
             st.button("Fitness", on_click=set_stage, args=["e"], use_container_width=True)
@@ -407,9 +425,43 @@ def launchpad(username, password):
     # end if
 
     # --- ADD NEW HABITS ---
+    if st.session_state.stage == "i":
+        st.set_page_config(layout="centered")
+        st.title("Add Habits")
+        st.divider()
+        st.write("Please select the type of habit you want to Add")
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.button("Fitness", on_click=set_stage, args=["j"], use_container_width=True)
+        with col2:       
+            st.button("Finance", on_click=set_stage, args=["k"], use_container_width=True)
+        with col3:
+            st.button("Relationships", on_click=set_stage, args=["l"], use_container_width=True)
+        with col4:
+            st.button("Accademic / Work", on_click=set_stage, args=["m"], use_container_width=True)
+        make_sidebar()
+    # end if
 
-
-
+    if st.session_state.stage == "j":
+        type = "fit"
+        add_habit(type)
+        make_sidebar()
+    # end if
+    if st.session_state.stage == "k":
+        type = "fin"
+        add_habit(type)
+        make_sidebar()
+    # end if
+    if st.session_state.stage == "l":
+        type = "rel"
+        add_habit(type)
+        make_sidebar()
+    # end if
+    if st.session_state.stage == "m":
+        type = "acc"
+        add_habit(type)
+        make_sidebar()
+    # end if
     # st.write(st.session_state)
 # end function
 
