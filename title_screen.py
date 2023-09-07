@@ -200,13 +200,7 @@ def title_screen():
     if st.session_state.stage == 5:
         user = st.session_state.user
         st.title("Fitness")
-        st.write("Add your habits in the text box bellow, Or you can choose from the suggestions")
-        fit_hab = st.text_input("add habit",key = "fit_hab", label_visibility="collapsed")
-        if fit_hab != "":
-            user.user_dictionary["habits"][f"fit_hab{st.session_state.fit_hab_count}"] = {"desc": fit_hab, "dates_done": []}
-            st.session_state.user = user
-            st.button("Add another Habbit", on_click=set_stage, args=[4])
-            st.session_state.fit_hab_count += 1
+        st.write("Select your habits from the options below, you can add your own custom habits on the launchpad")
 
         st.divider()
         # use the checkbox
@@ -265,13 +259,7 @@ def title_screen():
     if st.session_state.stage == 6:
         user = st.session_state.user
         st.title("Finances")
-        st.write("Add your habits in the text box bellow, Or you can choose from the suggestions")
-        fin_hab = st.text_input("add habit",key = "fin_hab", label_visibility="collapsed")
-        if fin_hab != "":
-            user.user_dictionary["habits"][f"fin_hab{st.session_state.fin_hab_count}"] = {"desc": fin_hab, "dates_done": []}
-            st.session_state.user = user
-            st.button("Add another Habbit", on_click=set_stage, args=[4])
-            st.session_state.fin_hab_count += 1
+        st.write("Select your habits from the options below, you can add your own custom habits on the launchpad")
 
         st.divider()
 
@@ -322,13 +310,7 @@ def title_screen():
     if st.session_state.stage == 7:
         user = st.session_state.user
         st.title("Relationships")
-        st.write("Add your habits in the text box bellow, Or you can choose from the suggestions")
-        rel_hab = st.text_input("add habit",key = "rel_hab", label_visibility="collapsed")
-        if rel_hab != "":
-            user.user_dictionary["habits"][f"rel_hab{st.session_state.rel_hab_count}"] = {"desc": rel_hab, "dates_done": []}
-            st.session_state.user = user
-            st.button("Add another Habbit", on_click=set_stage, args=[4])
-            st.session_state.rel_hab_count += 1
+        st.write("Select your habits from the options below, you can add your own custom habits on the launchpad")
 
         st.divider()
         gratitude = st.checkbox("**Gratitude**: Express appreciation for the people in your life through words and actions.")
@@ -366,13 +348,7 @@ def title_screen():
     if st.session_state.stage == 8:
         user = st.session_state.user
         st.title("Academic / Work")
-        st.write("Add your habits in the text box bellow, Or you can choose from the suggestions")
-        acc_hab = st.text_input("add habit",key = "acc_hab", label_visibility="collapsed")
-        if acc_hab != "":
-            user.user_dictionary["habits"][f"acc_hab{st.session_state.acc_hab_count}"] = {"desc": acc_hab, "dates_done":[]}
-            st.session_state.user = user
-            st.button("Add another Habbit", on_click=set_stage, args=[4])
-            st.session_state.acc_hab_count += 1
+        st.write("Select your habits from the options below, you can add your own custom habits on the launchpad")
         
         st.divider()
         cont_learn = st.checkbox("**Continuous Learning**: Cultivate a habit of learning by reading books, taking courses, or attending workshops relevant to your field.")
