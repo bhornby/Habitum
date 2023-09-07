@@ -205,7 +205,7 @@ def title_screen():
         if fit_hab != "":
             user.user_dictionary["habits"][f"fit_hab{st.session_state.fit_hab_count}"] = {"desc": fit_hab, "dates_done": []}
             st.session_state.user = user
-            st.button("Add another Habbit", on_click=set_stage, args=[10])
+            st.button("Add another Habbit", on_click=set_stage, args=[4])
             st.session_state.fit_hab_count += 1
 
         st.divider()
@@ -258,7 +258,7 @@ def title_screen():
                 st.session_state.user = user
                 st.session_state.fit_hab_count += 1
             # end if
-            set_stage(10)
+            set_stage(4)
     # end if
 
     # --- Finance Habits ---
@@ -270,7 +270,7 @@ def title_screen():
         if fin_hab != "":
             user.user_dictionary["habits"][f"fin_hab{st.session_state.fin_hab_count}"] = {"desc": fin_hab, "dates_done": []}
             st.session_state.user = user
-            st.button("Add another Habbit", on_click=set_stage, args=[10])
+            st.button("Add another Habbit", on_click=set_stage, args=[4])
             st.session_state.fin_hab_count += 1
 
         st.divider()
@@ -315,7 +315,7 @@ def title_screen():
                 st.session_state.user = user
                 st.session_state.fin_hab_count += 1
             # end if
-            set_stage(10)
+            set_stage(4)
     # end if
     
     # --- RELATIONSHIP HABITS ---
@@ -327,7 +327,7 @@ def title_screen():
         if rel_hab != "":
             user.user_dictionary["habits"][f"rel_hab{st.session_state.rel_hab_count}"] = {"desc": rel_hab, "dates_done": []}
             st.session_state.user = user
-            st.button("Add another Habbit", on_click=set_stage, args=[10])
+            st.button("Add another Habbit", on_click=set_stage, args=[4])
             st.session_state.rel_hab_count += 1
 
         st.divider()
@@ -359,7 +359,7 @@ def title_screen():
                 st.session_state.user = user
                 st.session_state.rel_hab_count += 1
             # end if
-            set_stage(10)
+            set_stage(4)
     # end if
         
     # --- ACADEMIC / WORK HABITS ---
@@ -371,7 +371,7 @@ def title_screen():
         if acc_hab != "":
             user.user_dictionary["habits"][f"acc_hab{st.session_state.acc_hab_count}"] = {"desc": acc_hab, "dates_done":[]}
             st.session_state.user = user
-            st.button("Add another Habbit", on_click=set_stage, args=[10])
+            st.button("Add another Habbit", on_click=set_stage, args=[4])
             st.session_state.acc_hab_count += 1
         
         st.divider()
@@ -411,7 +411,7 @@ def title_screen():
                 st.session_state.user = user
                 st.session_state.acc_hab_count += 1
             # end if
-            set_stage(10)
+            set_stage(4)
         # end if
     # end if
 

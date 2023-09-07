@@ -143,21 +143,21 @@ def display_habits(user):
     
     if fit_flag > 0:
         make_checkbox_col("fit",fit_hab_list, habits)
+        update_checkbox_col("Fitness", habits, fit_hab_list,user)
     # end if
     if fin_flag > 0:
         make_checkbox_col("fin",fin_hab_list,habits)
+        update_checkbox_col("Finances", habits, fin_hab_list,user)
     # end if
     if rel_flag > 0:
         make_checkbox_col("rel", rel_hab_list,habits)
+        update_checkbox_col("Relationships", habits, rel_hab_list,user)
     # end if
     if acc_flag > 0:
         make_checkbox_col("acc", acc_hab_list,habits)
+        update_checkbox_col("Accademic", habits, acc_hab_list,user)
     # end if
-
-    update_checkbox_col("Fitness", habits, fit_hab_list,user)
-    update_checkbox_col("Finances", habits, fin_hab_list,user)
-    update_checkbox_col("Relationships", habits, rel_hab_list,user)
-    update_checkbox_col("Accademic", habits, acc_hab_list,user)
+# end function
 
 def update_checkbox_col(name, habits, habit_list, user):
     if name == "Fitness":
@@ -276,7 +276,73 @@ def make_checkbox_col(type, habit_list, habits):
         key=habit_name,
         use_container_width=True,
     )             
-# end function    
+# end function 
+
+def make_button(habit_list):
+    string = ""
+    count = 0
+    button_list = []
+    for habit in habit_list:
+        string = habit["desc"]
+        button = st.button(string, use_container_width=True, key=f"button{count}")
+        button_list.append(button)
+        count+=1
+    # next habit
+
+    pos = 0
+    for button in button_list:
+        if button == True:
+            return pos
+        pos += 1
+    # next button
+# end function
+    
+def change_habits(type):
+            habit_list = []
+            habits = st.session_state.habits
+            # gives us a list of all the habits in area selected
+            for key in habits:
+                if type in key:
+                    habit_list.append(habits[key])
+                # end if
+            # next key
+            
+            st.title("Edit Habits")
+            st.divider()
+            col1, col2 = st.columns(2, gap="large")
+            with col1:
+                # display the habits in a way the user can choose them
+                st.write("Please select the habit you want to delete")
+                pos = make_button(habit_list)
+            with col2:
+                st.write("You have chosen to delete this habit:")
+                if pos != None:
+                    st.write(habit_list[pos]["desc"])
+                    #  need to return this information, but need to do an are you sure check before hand
+                    st.checkbox("Are you sure", on_change=delete_habit, args=[habit_list[pos]["desc"]])
+# end function
+                    
+                        
+def delete_habit(habit_to_delete):
+    habits = st.session_state.habits
+    for key in habits:
+        if habits[key]["desc"] == habit_to_delete:
+            del habits[key]
+            break
+        # end if
+    st.session_state.habits = habits
+    update_save()
+                
+
+def make_sidebar():
+    with st.sidebar:
+        st.title("Navigation")
+        st.button("Launchpad", on_click=set_stage, args=["c"], use_container_width=True)
+        st.button("Edit Habits", on_click=set_stage, args=["d"], use_container_width=True) 
+        st.button("Add new Habit", on_click=set_stage, args=["i"], use_container_width=True)          
+# end function
+    
+
 
 def launchpad(username, password):
     # --- HOME PAGE ---
@@ -297,7 +363,53 @@ def launchpad(username, password):
             display_habits(user)
         with col3:
             display_metrics()
+        make_sidebar()
+    # end if
+    
+    
+    # --- DELETE HABITS ---
+    if st.session_state.stage == "d":
+        st.set_page_config(layout="centered")
+        st.title("Edit Habits")
+        st.divider()
+        st.write("Please select which area you want to Delete")
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.button("Fitness", on_click=set_stage, args=["e"], use_container_width=True)
+        with col2:       
+            st.button("Finance", on_click=set_stage, args=["f"], use_container_width=True)
+        with col3:
+            st.button("Relationships", on_click=set_stage, args=["g"], use_container_width=True)
+        with col4:
+            st.button("Accademic / Work", on_click=set_stage, args=["h"], use_container_width=True)
+        make_sidebar()
+    # end if
 
-        # st.write(st.session_state)
+    if st.session_state.stage == "e":
+        type = "fit"
+        change_habits(type)
+        make_sidebar()
+    # end if
+    if st.session_state.stage == "f":
+        type = "fin"
+        change_habits(type)
+        make_sidebar()
+    # end if
+    if st.session_state.stage == "g":
+        type = "rel"
+        change_habits(type)
+        make_sidebar()
+    # end if
+    if st.session_state.stage == "h":
+        type = "acc"
+        change_habits(type)
+        make_sidebar()
+    # end if
+
+    # --- ADD NEW HABITS ---
+
+
+
+    # st.write(st.session_state)
 # end function
 
