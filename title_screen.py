@@ -2,6 +2,12 @@
 import streamlit as st
 import datetime
 import json
+import streamlit as st
+from PIL import Image
+import pandas as pd
+import numpy as np
+import time
+
 
 class Userclass:
     #constructor
@@ -136,13 +142,62 @@ def title_screen():
     if "login_finished" not in st.session_state:
             make_login_finished()
 
+# --- MAIN LANDING PAGE ---
     if st.session_state.stage == 0:
-        st.title("Welcome to *Habitum*")
+        st.set_page_config(layout="centered")
+        st.title("*Habitum*")
+        st.divider()
+        
+        
+        st.subheader("Habitum is the to do list that makes it easy for you to visualise, analyse, and share you habits.")
+        st.markdown("#")
+        col3, col4 = st.columns(2)
+        with col3:
+            st.metric(label="Habits Completed", value="5", delta="1")
+        with col4:
+            st.metric(label="Habits Remaining", value="9", delta="-5", delta_color="inverse")
+        st.markdown("#")
+        st.markdown("#")
+        st.subheader("View your progress at a glance with the metrics system, or delve deeper with our graphical analysis")
+        st.markdown("#")
 
-        st.write("Congratulations on taking the first step towards a brighter you. 🌟 ")
-        st.write("Habitum is here to guide you on your journey of building positive habits and maintaining streaks that lead to lasting change.")
-        st.write("Our app is designed to empower you, helping you unlock your full potential one day at a time. Whether you're striving for better health, increased productivity, enhanced mindfulness, or any other goal that resonates with you, habitum is your companion in this exciting endeavor. Tap 'Next' to learn how Habitum works and how you can make the most of its features. Remember, every small step adds up to a remarkable transformation. 🚀") 
-        st.write("Here's to a radiant future filled with accomplishments and growth! The Habitum Team")
+        chart_data = pd.DataFrame(
+        np.random.randn(40, 2),
+        columns = ['Go for a run', 'Walk the dog'])
+
+        st.area_chart(chart_data)
+
+        st.markdown("######")
+        st.subheader("Choose or Create as many habits as you want, such as:")
+        st.markdown("#####")
+        col1, col2, col3 = st.columns(3)
+        with col2:
+            st.write("- Brush your teeth\n- Go to the gym\n- Practice Piano\n- Sleep 8 hours")
+        st.markdown("#")
+
+        st.subheader("Everyday you complete a task, your streak is extened! So don't break the chain, or your streal will fall to zero.")
+
+        st.markdown("#")
+
+        st.subheader("Compete with you friends to maintain the longest streak unlocking  medals and rewards along the way.")
+
+        st.markdown("#")
+
+        st.subheader("Working on someting everyday helps you form new habits.")
+
+        st.markdown("#")
+
+        st.subheader("Live the life you deserve to live, you my friend deserve a good one")
+        
+        st.markdown("#")
+
+        progress_text = "Habitum Loading..."
+        my_bar = st.progress(0, text=progress_text)
+
+        for percent_complete in range(100):
+            time.sleep(0.05)
+            my_bar.progress(percent_complete + 1, text=progress_text)
+        # next percent completed
         
         account_status = st.radio("Do you have an account?", ("Yes", "No"),key="options")
         if account_status == "Yes":
