@@ -24,6 +24,50 @@ def update_save():
     # need to replace the old with the new
     with open(f"{filename}information.json", 'w', encoding='utf-8') as json_file:
         json.dump(user_dict, json_file)
+# end function
+
+def calculate_streaks():
+    habits = st.session_state.habits
+    longest = 0
+    habit_date_list = []
+    longest_habit = None
+
+    for key in habits:
+        habit_date_list = habits[key]["dates_done"]
+        count = 0
+        temp = 0
+        day = 0
+
+        if habit_date_list == []:
+            continue
+        else:
+            for date in habit_date_list:
+                date_string = date
+                date_string.replace("/","")
+                date_num_list = list(date_string)
+                # take the 3rd and 4th characters and append them into a string then convert to number then save as temp - mm/dd/yyyy
+                
+                if date_num_list[3] == "0":
+                    day = date_num_list[4]
+                else:
+                    day = date_num_list[3] + date_num_list[4]
+                # end if
+                
+                day = int(day)
+                if (temp+1) == day:
+                    temp = day
+                    count += 1
+                # end if
+            # next day
+            if count > longest:
+                longest = temp
+                # --- TO RETURN THE LONGEST HABIT ---
+                longest_habit = habits[key]
+            # end if
+        # end if
+    # next key
+    return longest, longest_habit
+# end function
 
 def display_metrics():
     habits = st.session_state.habits
@@ -40,11 +84,16 @@ def display_metrics():
     # next key
     habits_remaining = num_habits - habits_completed
 
-    col1, col2 = st.columns(2)
-    with col1:
-        st.metric(label="Habits Completed", value=habits_completed, delta=habits_completed,delta_color="normal")
+    # --- Caluclate the longest streak ---
+    longest_streak, longest_habit = calculate_streaks()
+
+    col1, col2, col3 = st.columns(3)
     with col2:
+        st.metric(label="Habits Completed", value=habits_completed, delta=habits_completed,delta_color="normal")
+    with col3:
         st.metric(label="Habits Remaining", value=habits_remaining, delta=-habits_completed, delta_color="inverse")
+    with col1:
+        st.metric(label="Longest Streak",value=f"{longest_streak}🔥", delta=longest_streak,delta_color="normal")
 
     # area chart showing the running progress
     
@@ -75,11 +124,7 @@ def display_metrics():
     for day in date_list:
         index_list.append(count)
         count += 1
-    
-    # st.write("habit completed list")
-    # st.write(habits_completed_list)
-    # st.write("date list")
-    # st.write(date_list)
+
 
     data = {
         "Habits Completed": habits_completed_list,
@@ -337,9 +382,11 @@ def delete_habit(habit_to_delete):
 def make_sidebar():
     with st.sidebar:
         st.title("Navigation")
+        st.markdown("#####")
         st.button("Launchpad", on_click=set_stage, args=["c"], use_container_width=True)
+        st.button("View Streaks", on_click=set_stage, args=["n"], use_container_width=True)  
         st.button("Edit Habits", on_click=set_stage, args=["d"], use_container_width=True) 
-        st.button("Add new Habit", on_click=set_stage, args=["i"], use_container_width=True)          
+        st.button("Add new Habit", on_click=set_stage, args=["i"], use_container_width=True)
 # end function
     
 def add_habit(type):
@@ -462,6 +509,13 @@ def launchpad(username, password):
         add_habit(type)
         make_sidebar()
     # end if
+
+    # --- STREAKS VIEWING PAGE
+    if st.session_state.stage == "n":
+        st.set_page_config(layout='centered')
+        longest, longest_habit = calculate_streaks()
+
+
     # st.write(st.session_state)
 # end function
 

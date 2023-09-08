@@ -151,11 +151,14 @@ def title_screen():
         
         st.subheader("Habitum is the to do list that makes it easy for you to visualise, analyse, and share you habits.")
         st.markdown("#")
-        col3, col4 = st.columns(2)
+        col3, col4, col5 = st.columns(3)
         with col3:
             st.metric(label="Habits Completed", value="5", delta="1")
         with col4:
             st.metric(label="Habits Remaining", value="9", delta="-5", delta_color="inverse")
+        with col5:
+            st.metric(label="Longest Streak", value="5🔥", delta="1")
+
         st.markdown("#")
         st.markdown("#")
         st.subheader("View your progress at a glance with the metrics system, or delve deeper with our graphical analysis")
@@ -191,13 +194,13 @@ def title_screen():
         
         st.markdown("#")
 
-        progress_text = "Habitum Loading..."
-        my_bar = st.progress(0, text=progress_text)
+        # progress_text = "Habitum Loading..."
+        # my_bar = st.progress(0, text=progress_text)
 
-        for percent_complete in range(100):
-            time.sleep(0.05)
-            my_bar.progress(percent_complete + 1, text=progress_text)
-        # next percent completed
+        # for percent_complete in range(100):
+        #     time.sleep(0.1)
+        #     my_bar.progress(percent_complete + 1, text=progress_text)
+        # # next percent completed
         
         account_status = st.radio("Do you have an account?", ("Yes", "No"),key="options")
         if account_status == "Yes":
