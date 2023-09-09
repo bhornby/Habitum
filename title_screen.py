@@ -152,12 +152,12 @@ def title_screen():
         st.subheader("Habitum is the to do list that makes it easy for you to visualise, analyse, and share you habits.")
         st.markdown("#")
         col3, col4, col5 = st.columns(3)
-        with col3:
-            st.metric(label="Habits Completed", value="5", delta="1")
         with col4:
-            st.metric(label="Habits Remaining", value="9", delta="-5", delta_color="inverse")
+            st.metric(label="Habits Completed", value="5", delta="1")
         with col5:
-            st.metric(label="Longest Streak", value="5🔥", delta="1")
+            st.metric(label="Habits Remaining", value="9", delta="-5", delta_color="inverse")
+        with col3:
+            st.metric(label="Longest Streak", value="3🔥", delta="1")
 
         st.markdown("#")
         st.markdown("#")
@@ -202,11 +202,11 @@ def title_screen():
         #     my_bar.progress(percent_complete + 1, text=progress_text)
         # # next percent completed
         
-        account_status = st.radio("Do you have an account?", ("Yes", "No"),key="options")
-        if account_status == "Yes":
-            st.button("Login", on_click=set_stage, args=["a"], key="login")
-        elif account_status == "No":
-            st.button("Create Account", on_click=set_stage, args=[1], key="new account")    
+        col1 , col2 = st.columns(2)
+        with col1:
+            st.button("Login", on_click=set_stage, args=["a"], key="login", use_container_width=True)
+        with col2:
+            st.button("Create Account", on_click=set_stage, args=[1], key="new account", use_container_width=True)    
     # end if
 
     # --- NEW ACCOUNT CODE ---
@@ -273,7 +273,7 @@ def title_screen():
         if clicked == True:
             if reg_exercise == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"fit_hab{st.session_state.fit_hab_count}"] = {"desc":"Regular Exercise - At least 30 minutes physical activity", "dates_done":[]}
+                habits[f"fit_hab{st.session_state.fit_hab_count}"] = {"desc":"Regular Exercise - At least 30 minutes physical activity", "dates_done":[], "streak": 0}
                 user.user_dictionary["habits"] = habits
                 st.session_state.fit_hab_count += 1
                 st.session_state.user = user
@@ -281,7 +281,7 @@ def title_screen():
 
             if bal_nutrition == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"fit_hab{st.session_state.fit_hab_count}"] = {"desc":"Balanced Nutrition - Consume a well-rounded diet", "dates_done":[]}
+                habits[f"fit_hab{st.session_state.fit_hab_count}"] = {"desc":"Balanced Nutrition - Consume a well-rounded diet", "dates_done":[], "streak": 0}
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.fit_hab_count += 1
@@ -289,7 +289,7 @@ def title_screen():
 
             if sleep == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"fit_hab{st.session_state.fit_hab_count}"] = {"desc":"Adequate Sleep - Sleep 7-9 hours each night", "dates_done":[]}
+                habits[f"fit_hab{st.session_state.fit_hab_count}"] = {"desc":"Adequate Sleep - Sleep 7-9 hours each night", "dates_done":[], "streak": 0}
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.fit_hab_count += 1
@@ -297,7 +297,7 @@ def title_screen():
 
             if mindful == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"fit_hab{st.session_state.fit_hab_count}"] = {"desc":"Mindful Movement - Practice a mindful exercies like Taichi", "dates_done":[]}
+                habits[f"fit_hab{st.session_state.fit_hab_count}"] = {"desc":"Mindful Movement - Practice a mindful exercies like Taichi", "dates_done":[], "streak": 0}
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.fit_hab_count += 1
@@ -305,7 +305,7 @@ def title_screen():
 
             if hydration == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"fit_hab{st.session_state.fit_hab_count}"] = {"desc":"Hydration - Drink at least 2l of water a day", "dates_done":[]}
+                habits[f"fit_hab{st.session_state.fit_hab_count}"] = {"desc":"Hydration - Drink at least 2l of water a day", "dates_done":[], "streak": 0}
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.fit_hab_count += 1
@@ -332,7 +332,7 @@ def title_screen():
         if clicked == True:
             if budgeting == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"fin_hab{st.session_state.fin_hab_count}"] = {"desc":"Budgeting - Spend some time each day to review you spending", "dates_done":[]}
+                habits[f"fin_hab{st.session_state.fin_hab_count}"] = {"desc":"Budgeting - Spend some time each day to review you spending", "dates_done":[], "streak": 0}
                 user.user_dictionary["habits"] = habits
                 st.session_state.fin_hab_count += 1
                 st.session_state.user = user
@@ -340,7 +340,7 @@ def title_screen():
 
             if saving == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"fin_hab{st.session_state.fin_hab_count}"] = {"desc":"Saving - Set aside a some money for rainy days","dates_done":[]}
+                habits[f"fin_hab{st.session_state.fin_hab_count}"] = {"desc":"Saving - Set aside a some money for rainy days","dates_done":[], "streak": 0}
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.fin_hab_count += 1
@@ -348,7 +348,7 @@ def title_screen():
 
             if investing == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"fin_hab{st.session_state.fin_hab_count}"] = {"desc":"Investing - Invest your money to make it work for you", "dates_done":[]}
+                habits[f"fin_hab{st.session_state.fin_hab_count}"] = {"desc":"Investing - Invest your money to make it work for you", "dates_done":[], "streak": 0}
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.fit_hab_count += 1
@@ -356,7 +356,7 @@ def title_screen():
 
             if delay_grat == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"fin_hab{st.session_state.fin_hab_count}"] = {"desc":"Spend No Money - Delay Gratification","dates_done":[]}
+                habits[f"fin_hab{st.session_state.fin_hab_count}"] = {"desc":"Spend No Money - Delay Gratification","dates_done":[], "streak": 0}
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.fin_hab_count += 1
@@ -380,21 +380,21 @@ def title_screen():
         if clicked == True:
             if gratitude == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"rel_hab{st.session_state.rel_hab_count}"] = {"desc":"Gratitude - Express appreciation for the people an things in your life","dates_done":[]}
+                habits[f"rel_hab{st.session_state.rel_hab_count}"] = {"desc":"Gratitude - Express appreciation for the people an things in your life","dates_done":[], "streak": 0}
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.rel_hab_count += 1
 
             if qual_time == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"rel_hab{st.session_state.rel_hab_count}"] = {"desc":"Quality Time - Spend Time with those you Love","dates_done":[]}
+                habits[f"rel_hab{st.session_state.rel_hab_count}"] = {"desc":"Quality Time - Spend Time with those you Love","dates_done":[], "streak": 0}
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.rel_hab_count += 1
             
             if communication == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"rel_hab{st.session_state.rel_hab_count}"] = {"desc":"Communication - Improve your social skills by speaking to a stranger everyday", "dates_done":[]}
+                habits[f"rel_hab{st.session_state.rel_hab_count}"] = {"desc":"Communication - Improve your social skills by speaking to a stranger everyday", "dates_done":[], "streak": 0}
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.rel_hab_count += 1
@@ -419,28 +419,28 @@ def title_screen():
         if clicked == True:
             if cont_learn == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"acc_hab{st.session_state.acc_hab_count}"] = {"desc":"Continuous Learning - Learn something new everyday", "dates_done":[]}
+                habits[f"acc_hab{st.session_state.acc_hab_count}"] = {"desc":"Continuous Learning - Learn something new everyday", "dates_done":[], "streak": 0}
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.acc_hab_count += 1
 
             if time_management == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"acc_hab{st.session_state.acc_hab_count}"] = {"desc":"Time Management - Plan the next day, focus your intent on a few critical tasks", "dates_done":[]}
+                habits[f"acc_hab{st.session_state.acc_hab_count}"] = {"desc":"Time Management - Plan the next day, focus your intent on a few critical tasks", "dates_done":[], "streak": 0}
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.acc_hab_count += 1
         
             if goal_setting == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"acc_hab{st.session_state.acc_hab_count}"] = {"desc":"Goal Setting - Redefine and look over your goals everyday","dates_done":[]}
+                habits[f"acc_hab{st.session_state.acc_hab_count}"] = {"desc":"Goal Setting - Redefine and look over your goals everyday","dates_done":[], "streak": 0}
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.acc_hab_count += 1
 
             if networking == True:
                 habits = user.user_dictionary["habits"]
-                habits[f"acc_hab{st.session_state.acc_hab_count}"] = {"desc":"Networking - Build a strong professional network", "dates_done":[]}
+                habits[f"acc_hab{st.session_state.acc_hab_count}"] = {"desc":"Networking - Build a strong professional network", "dates_done":[], "streak": 0}
                 user.user_dictionary["habits"] = habits
                 st.session_state.user = user
                 st.session_state.acc_hab_count += 1

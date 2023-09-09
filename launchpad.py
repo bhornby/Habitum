@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from datetime import datetime
+from datetime import datetime,  timedelta
 import json
 from title_screen import Userclass
 from title_screen import load_account
@@ -32,38 +32,78 @@ def calculate_streaks():
     habit_date_list = []
     longest_habit = None
 
+    # calculate today, and yesterday
+    now = datetime.now()
+    today = now.strftime("%m/%d/%Y")
+    yesterday = datetime.today() - timedelta(days=1)
+    yesterday = yesterday.strftime('%m/%d/%y')
+
+    # then find the date in the same format as temp
+    today_list = list(today)
+    yesterday_list = list(yesterday)
+
+    if today_list[3] == "0":
+        today = int(today_list[4])
+    else:
+        today = int(today_list[3] + today_list[4])
+    # end if
+
+    if yesterday_list[3] == "0":
+        yesterday = int(yesterday_list[4])
+    else:
+        yesterday = int(yesterday_list[3] + yesterday_list[4])
+    # end if
+
     for key in habits:
         habit_date_list = habits[key]["dates_done"]
-        count = 0
-        temp = 0
-        day = 0
+        streak = 0
+        temp = None
+        most_rescent = False
+            
 
         if habit_date_list == []:
             continue
         else:
             for date in habit_date_list:
                 date_string = date
-                date_string.replace("/","")
                 date_num_list = list(date_string)
                 # take the 3rd and 4th characters and append them into a string then convert to number then save as temp - mm/dd/yyyy
-                
-                if date_num_list[3] == "0":
-                    day = date_num_list[4]
+
+                # set temp - if it is the first date then there is nothing in temp so we need to set the temp
+                if temp == None:
+                    if date_num_list[3] == "0":
+                        temp = int(date_num_list[4])
+                    else:
+                        temp = int(date_num_list[3] + date_num_list[4])
                 else:
-                    day = date_num_list[3] + date_num_list[4]
-                # end if
+                    if date_num_list[3] == "0":
+                        day = int(date_num_list[4])
+                    else:
+                        day = int(date_num_list[3] + date_num_list[4])
                 
-                day = int(day)
-                if (temp+1) == day:
-                    temp = day
-                    count += 1
+                    # if the new day is one day on from temp you add once to the count as the streak has increased
+                    if (temp+1) == day:
+                        temp = day
+                        streak += 1
+                    
+                    if day == yesterday or day == today:
+                        most_rescent = True
                 # end if
             # next day
-            if count > longest:
-                longest = temp
-                # --- TO RETURN THE LONGEST HABIT ---
-                longest_habit = habits[key]
-            # end if
+        
+        # to check if the streak has been either today or yesterday validating the streak
+        if most_rescent == False:
+            streak = 0
+
+        if streak > longest:
+            longest = streak
+            # --- TO RETURN THE LONGEST HABIT ---
+            longest_habit = habits[key]
+        # end if
+
+        habits[key]["streak"] = streak 
+        st.session_state.habits = habits
+        update_save() 
         # end if
     # next key
     return longest, longest_habit
@@ -402,7 +442,7 @@ def add_habit(type):
     st.write("Type your habit in the text box bellow and click SUBMIT to add it")
     habit = st.text_input("add habit",key = key_name, label_visibility="collapsed")
     if habit != "":
-        habits[key_name] = {"desc": habit, "dates_done": []}
+        habits[key_name] = {"desc": habit, "dates_done": [], "streak": 0}
         st.button("Add another Habbit", on_click=set_stage, args=["d"])
     # end if
     st.session_state.habits = habits
@@ -514,6 +554,10 @@ def launchpad(username, password):
     if st.session_state.stage == "n":
         st.set_page_config(layout='centered')
         longest, longest_habit = calculate_streaks()
+
+
+        make_sidebar()
+    # end if
 
 
     # st.write(st.session_state)
