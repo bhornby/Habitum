@@ -182,6 +182,10 @@ def title_screen():
 
         st.markdown("#")
 
+        col3, col4, col5 = st.columns(3)
+        with col4:
+            st.metric(label="Longest Streak", value="0💀", delta="-3", delta_color="normal")
+
         st.subheader("Compete with you friends to maintain the longest streak unlocking  medals and rewards along the way.")
 
         st.markdown("#")
@@ -190,17 +194,9 @@ def title_screen():
 
         st.markdown("#")
 
-        st.subheader("Live the life you deserve to live, you my friend deserve a good one")
+        st.subheader("Live the life you deserve to live, go build those habits")
         
         st.markdown("#")
-
-        # progress_text = "Habitum Loading..."
-        # my_bar = st.progress(0, text=progress_text)
-
-        # for percent_complete in range(100):
-        #     time.sleep(0.1)
-        #     my_bar.progress(percent_complete + 1, text=progress_text)
-        # # next percent completed
         
         col1 , col2 = st.columns(2)
         with col1:
@@ -458,11 +454,8 @@ def title_screen():
     if st.session_state.stage == "a":
         st.session_state.username = st.text_input("What is your username")
         st.session_state.password = st.text_input("What is your password")
-        st.button("Login",on_click=set_stage, args=["b"])
-    
-    if st.session_state.stage == "b":
         st.button("Continue to Launchpad", on_click=finish_login,use_container_width=True)
-
+    
     if st.session_state.login_finished == True:
         return [st.session_state.username, st.session_state.password]
 

@@ -127,13 +127,17 @@ def display_metrics():
     # --- Caluclate the longest streak ---
     longest_streak, longest_habit = calculate_streaks()
 
+    streak_val = f"{longest_streak}🔥"
+    if longest_streak == 0:
+        streak_val = "0💀"
+
     col1, col2, col3 = st.columns(3)
     with col2:
         st.metric(label="Habits Completed", value=habits_completed, delta=habits_completed,delta_color="normal")
     with col3:
         st.metric(label="Habits Remaining", value=habits_remaining, delta=-habits_completed, delta_color="inverse")
     with col1:
-        st.metric(label="Longest Streak",value=f"{longest_streak}🔥", delta=longest_streak,delta_color="normal")
+        st.metric(label="Longest Streak",value=streak_val, delta=longest_streak,delta_color="normal")
 
     # area chart showing the running progress
     
