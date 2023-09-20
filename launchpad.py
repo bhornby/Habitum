@@ -129,7 +129,7 @@ def display_metrics():
 
     streak_val = f"{longest_streak}🔥"
     if longest_streak == 0:
-        streak_val = "0💀"
+        streak_val = "0"
 
     col1, col2, col3 = st.columns(3)
     with col2:
