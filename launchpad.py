@@ -442,6 +442,7 @@ def add_habit(type):
             count += 1
         # end if
     # next key
+    # st.write(count)
     key_name = f"{type}_hab{count}"
     st.write("Type your habit in the text box bellow and click SUBMIT to add it")
     habit = st.text_input("add habit",key = key_name, label_visibility="collapsed")
