@@ -54,6 +54,7 @@ def calculate_streaks():
         yesterday = int(yesterday_list[3] + yesterday_list[4])
     # end if
 
+    # the issue comes when you have days with no activity - or there is a  change in the month.
     for key in habits:
         habit_date_list = habits[key]["dates_done"]
         streak = 0
@@ -85,22 +86,31 @@ def calculate_streaks():
                     if (temp+1) == day:
                         temp = day
                         streak += 1
+                    # if the new day is not one from temp then the streak goes to zero
+                    elif (temp+1) != day:
+                        streak = 0
                     
                     if day == yesterday or day == today:
                         most_rescent = True
                 # end if
             # next day
-        
+
         # to check if the streak has been either today or yesterday validating the streak
         if most_rescent == False:
             streak = 0
-
-        if streak > longest:
-            longest = streak
-            # --- TO RETURN THE LONGEST HABIT ---
-            longest_habit = habits[key]
         # end if
 
+        if habits[key]["streak"] == []:
+            streak = 0
+        #end if
+
+        # st.write(most_rescent, streak, habits[key]["desc"]) 
+        # find the longest streak
+        if streak > longest:
+            longest = streak
+            longest_habit = habits[key]["desc"]
+
+        #saves the streak
         habits[key]["streak"] = streak 
         st.session_state.habits = habits
         update_save() 
@@ -108,6 +118,34 @@ def calculate_streaks():
     # next key
     return longest, longest_habit
 # end function
+
+def display_streaks():
+    # just needs to take the length of the streaks from the habits dictionary and display the streak next to the habits
+    # want to order by longest streak
+    habits = st.session_state.habits
+    longest_streak, longest_habit = calculate_streaks()
+
+    st.title("Your Streaks")
+    st.markdown("##")
+    col3, col4 = st.columns(2)
+    with col3:
+        st.metric(label="Longest Streak",value=longest_streak,delta_color="normal")
+    with col4:
+        st.write(longest_habit)
+
+    st.divider()
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader("All Streaks")
+        for key in habits:
+            st.write(habits[key]["streak"])
+    with col2:
+        st.subheader("Habits")
+        for key in habits:
+            st.write(habits[key]["desc"])        
+# end function 
+
 
 def display_metrics():
     habits = st.session_state.habits
@@ -125,7 +163,7 @@ def display_metrics():
     habits_remaining = num_habits - habits_completed
 
     # --- Caluclate the longest streak ---
-    longest_streak, longest_habit = calculate_streaks()
+    longest_streak, longest_habit= calculate_streaks()
 
     streak_val = f"{longest_streak}🔥"
     if longest_streak == 0:
@@ -555,10 +593,10 @@ def launchpad(username, password):
         make_sidebar()
     # end if
 
-    # --- STREAKS VIEWING PAGE
+    # ---  VIEWING PAGE
     if st.session_state.stage == "n":
         st.set_page_config(layout='centered')
-        longest, longest_habit = calculate_streaks()
+        display_streaks()
 
 
         make_sidebar()
