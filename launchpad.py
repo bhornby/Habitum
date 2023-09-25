@@ -90,6 +90,10 @@ def calculate_streaks():
                     elif (temp+1) != day:
                         streak = 0
                     
+                    # needs to be if i did it yesterday you still maintain your streak
+                    if streak == 0 and day == yesterday:
+                        streak = 1
+                    
                     if day == yesterday or day == today:
                         most_rescent = True
                 # end if
