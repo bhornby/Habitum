@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 from datetime import datetime,  timedelta
 import json
 from title_screen import Userclass
@@ -133,21 +132,38 @@ def display_streaks():
     st.markdown("##")
     col3, col4 = st.columns(2)
     with col3:
-        st.metric(label="Longest Streak",value=longest_streak,delta_color="normal")
+        st.metric(label="Longest Streak",value=f"{longest_streak}🔥",delta_color="normal")
     with col4:
         st.write(longest_habit)
 
     st.divider()
 
-    col1, col2 = st.columns(2)
-    with col1:
-        st.subheader("All Streaks")
-        for key in habits:
-            st.write(habits[key]["streak"])
-    with col2:
-        st.subheader("Habits")
-        for key in habits:
-            st.write(habits[key]["desc"])        
+    # display rest of the streaks
+    streak_list = []
+    habit_list = []
+
+    for key in habits:
+        streak_list.append(habits[key]["streak"])
+    
+    for key in habits:
+            habit_list.append(habits[key]["desc"])  
+
+    data = {
+        "Streak":streak_list,
+        "Habit":habit_list,
+    }
+
+    df = pd.DataFrame(data)
+
+    st.dataframe(
+        df,
+        column_config={
+            "name": st.column_config.NumberColumn("Streak", help = "Click to Show longest"),
+        },
+        hide_index=True,
+        use_container_width=True
+    )
+          
 # end function 
 
 

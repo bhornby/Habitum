@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 import time
 
+online = False
 
 class Userclass:
     #constructor
@@ -186,23 +187,32 @@ def title_screen():
         with col4:
             st.metric(label="Longest Streak", value="0💀", delta="-3", delta_color="normal")
 
-        st.subheader("Compete with you friends to maintain the longest streak unlocking  medals and rewards along the way.")
+        st.subheader("Compete with you friends to maintain the longest streak unlocking medals and rewards along the way.")
 
-        st.markdown("#")
-
-        st.subheader("Working on someting everyday helps you form new habits.")
-
-        st.markdown("#")
-
-        st.subheader("Live the life you deserve to live, go build those habits")
+        col3, col4, col5 = st.columns(3)
+        with col4:
+            st.title("🏅🏅🏅🏅")
         
+        st.markdown("##")
+
+        st.subheader("Sign up to our weekly newsletter to be notified when Beta Access goes live!")
+
+        # st.subheader("Working on someting everyday helps you form new habits.")
+
         st.markdown("#")
+
+        # st.subheader("Live the life you deserve, go build those habits")
         
-        col1 , col2 = st.columns(2)
-        with col1:
-            st.button("Login", on_click=set_stage, args=["a"], key="login", use_container_width=True)
-        with col2:
-            st.button("Create Account", on_click=set_stage, args=[1], key="new account", use_container_width=True)    
+        # st.markdown("#")
+        
+        if online == True:
+            st.button("Sign up for pre-release", on_click=set_stage,args=["email"], use_container_width=True)
+        elif online == False:
+            col1 , col2 = st.columns(2)
+            with col1:
+                st.button("Login", on_click=set_stage, args=["a"], key="login", use_container_width=True)
+            with col2:
+                st.button("Create Account", on_click=set_stage, args=[1], key="new account", use_container_width=True)    
     # end if
 
     # --- NEW ACCOUNT CODE ---
@@ -464,8 +474,13 @@ def title_screen():
         st.session_state.username = user.user_dictionary["username"]
         st.session_state.password = user.user_dictionary["password"]
         return [st.session_state.username, st.session_state.password]
+    
+    # --- COLLECT USER EMAILS IF INTERESTED --- 
+    if st.session_state.stage == "email":
+        st.title("Registration")
+        
 
-    # TODO fix the create new account bug when accessing the launchpad
+    
     # st.write(st.session_state)
 # end function
         
