@@ -69,12 +69,14 @@ def calculate_streaks():
                 date_num_list = list(date_string)
                 # take the 3rd and 4th characters and append them into a string then convert to number then save as temp - mm/dd/yyyy
 
+
                 # set temp - if it is the first date then there is nothing in temp so we need to set the temp
                 if temp == None:
                     if date_num_list[3] == "0":
                         temp = int(date_num_list[4])
                     else:
                         temp = int(date_num_list[3] + date_num_list[4])
+                    streak = 1
                 else:
                     if date_num_list[3] == "0":
                         day = int(date_num_list[4])
@@ -83,24 +85,15 @@ def calculate_streaks():
                 
                     # if the new day is one day on from temp you add once to the count as the streak has increased
                     if (temp+1) == day:
-                        temp = day
                         streak += 1
+                        temp = day
                     # if the new day is not one from temp then the streak goes to zero
-                    elif (temp+1) != day:
+                    else:
                         streak = 0
-                    
-                    # needs to be if i did it yesterday you still maintain your streak
-                    if streak == 0 and day == yesterday:
-                        streak = 1
-                    
-                    if day == yesterday or day == today:
-                        most_rescent = True
+                        temp = None
+                    # end if
                 # end if
             # next day
-
-        # to check if the streak has been either today or yesterday validating the streak
-        if most_rescent == False:
-            streak = 0
         # end if
 
         if habits[key]["streak"] == []:
