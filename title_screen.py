@@ -179,7 +179,7 @@ def title_screen():
             st.write("- Brush your teeth\n- Go to the gym\n- Practice Piano\n- Sleep 8 hours")
         st.markdown("#")
 
-        st.subheader("Everyday you complete a task, your streak is extened! So don't break the chain, or your streal will fall to zero.")
+        st.subheader("Everyday you complete a task, your streak is extened! So don't break the chain, or your streak will fall to zero.")
 
         st.markdown("#")
 
