@@ -493,13 +493,13 @@ def add_habit(type):
             count += 1
         # end if
     # next key
-    # st.write(count)
+    st.write(count)
     key_name = f"{type}_hab{count}"
     st.write("Type your habit in the text box bellow and click SUBMIT to add it")
     habit = st.text_input("add habit",key = key_name, label_visibility="collapsed")
     if habit != "":
         habits[key_name] = {"desc": habit, "dates_done": [], "streak": 0}
-        st.button("Add another Habbit", on_click=set_stage, args=["d"])
+        st.button("Add another Habbit", on_click=set_stage, args=["i"])
     # end if
     st.session_state.habits = habits
     update_save()

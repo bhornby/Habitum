@@ -22,8 +22,7 @@ client = session.client('s3',
 def upload(filename):
 # Upload a file to your Space
 # idealy should wipe the existing file --- 
-    s3 = boto3.resource('s3')
-    s3.Bucket('habitum-user-data').upload_file(Filename = filename, Key = filename)
+    client.upload_file(filename, 'habitum-user-data', filename)
 
 # end if
 
